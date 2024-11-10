@@ -6,10 +6,9 @@ min_version("7.31.1")
 
 ##### load rules #####
 
-include: "rules/fragpipe.smk"
+include: "rules/sv_merge.smk"
 
 ### target_rules ####
 rule all:
     input:
-        get_fragpipe_output(),
-    default_target: True
+        os.path.join(out_dir, "minda", config["sample_name"]+"_minda_ensemble.vcf"),

@@ -1,0 +1,8 @@
+## example boiler plate config; will update as pipeline progresses
+## will add later ....
+samples: ./samples.tsv
+out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/SVAnnotator_test
+sample_name: AK-RT-004
+
+
+
