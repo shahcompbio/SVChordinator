@@ -9,6 +9,7 @@ rule sv_merge:
     params:
         sample_name=config["sample_name"],
         out_dir=os.path.join(out_dir, "minda"),
+        filter_bed=config["filter_bed"],
         min_support=2,
         tolerance=100,
         min_size=50
@@ -21,9 +22,9 @@ rule sv_merge:
         "docker://quay.io/preskaa/minda:v241109",
     shell:
         """
-        /minda/minda.py ensemble --tsv {input.tsv} --outdir {params.out_dir} \
+        /minda/minda.py ensemble --tsv {input.tsv} --out_dir {params.out_dir} \
         --min_support {params.min_support} --tolerance {params.tolerance} \
-        --min_size {params.min_size}
+        --min_size {params.min_size} --bed {params.filter_bed}
         """
 
 

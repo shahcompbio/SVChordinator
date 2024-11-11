@@ -3,6 +3,8 @@
 samples: ./samples.tsv
 out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/SVAnnotator_test
 sample_name: AK-RT-004
+# filter for minda to look at SVs in regions of interest
+filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
 
 
 
