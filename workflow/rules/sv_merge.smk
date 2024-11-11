@@ -21,7 +21,7 @@ rule sv_merge:
         "docker://quay.io/preskaa/minda:v241109",
     shell:
         """
-        ./minda.py ensemble --tsv {input.tsv} --outdir {params.out_dir} \
+        /minda/minda.py ensemble --tsv {input.tsv} --outdir {params.out_dir} \
         --min_support {params.min_support} --tolerance {params.tolerance} \
         --min_size {params.min_size}
         """
