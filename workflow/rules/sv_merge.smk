@@ -1,11 +1,9 @@
-import os
-out_dir = config["out_dir"]
 # merge SVs
 rule sv_merge:
     input:
-        tsv=config["samples"]
+        tsv=minda_tsv
     output:
-        merged_vcf=os.path.join(out_dir, "minda", config["sample_name"]+"_minda_ensemble.vcf")
+        merged_vcf=os.path.join(out_dir, "minda", sample_name + "_minda_ensemble.vcf")
     params:
         sample_name=config["sample_name"],
         out_dir=os.path.join(out_dir, "minda"),
@@ -23,8 +21,9 @@ rule sv_merge:
     shell:
         """
         /minda/minda.py ensemble --tsv {input.tsv} --out_dir {params.out_dir} \
-        --min_support {params.min_support} --tolerance {params.tolerance} \
-        --min_size {params.min_size} --bed {params.filter_bed}
+        --sample_name {params.sample_name} --min_support {params.min_support} \
+        --tolerance {params.tolerance} --min_size {params.min_size} \
+        --bed {params.filter_bed}
         """
 
 

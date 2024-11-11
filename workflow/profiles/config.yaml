@@ -14,7 +14,7 @@ default-resources:
   - mem_mb=20000
   - time=180
   - "tmpdir='/data1/shahs3/users/preskaa/tmp'"
-restart-times: 1 #temporary
+restart-times: 0 #temporary
 max-jobs-per-second: 3
 max-status-checks-per-second: 1
 local-cores: 1

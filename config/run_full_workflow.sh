@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --time=6:00:00
 #SBATCH --mem=8GB
-#SBATCH --job-name=10.1
+#SBATCH --job-name=17.1
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=preskaa@mskcc.org
 #SBATCH --output=slurm%j_snkmk.out

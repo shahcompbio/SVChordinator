@@ -5,10 +5,13 @@ min_version("7.31.1")
 
 
 ##### load rules #####
-
+include: "rules/common.smk"
 include: "rules/sv_merge.smk"
+include: "rules/genotype.smk"
 
 ### target_rules ####
 rule all:
     input:
-        os.path.join(out_dir, "minda", config["sample_name"]+"_minda_ensemble.vcf"),
+        os.path.join(out_dir, "minda", sample_name+"_minda_ensemble.vcf"),
+        os.path.join(out_dir,sample_name + "_tumor_genotypes.vcf")
+        os.path.join(out_dir,sample_name + "_normal_genotypes.vcf")
