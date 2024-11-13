@@ -5,6 +5,10 @@ rule reformat_minda:
     output:
         out_vcf = os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf")
     threads: 1
+    resources:
+        mem_mb = 4000,
+        time = 20,
+        retries = 0
     container:
         "docker://quay.io/preskaa/biopython:v241011a"
     script:

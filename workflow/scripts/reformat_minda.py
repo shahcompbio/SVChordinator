@@ -14,5 +14,11 @@ with open(out_vcf, "w+") as f:
         # skip offensive line
         if line.startswith("cmd"):
             continue
+        # replace quality with dummy number for sniffles
+        elif line.startswith("chr"):
+            terms = line.split("\t")
+            terms[5] = "30"
+            newline = ("\t").join(terms)
+            f.write(newline)
         else:
             f.write(line)
