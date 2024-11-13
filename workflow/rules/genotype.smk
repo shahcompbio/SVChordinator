@@ -13,7 +13,7 @@ rule reformat_minda:
 rule genotype_tumor:
     input:
         merged_vcf=os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf"),
-        tumor_bam=config["tumor_bam"]
+        tumor_bam=config["genotype"]["tumor_bam"]
     output:
         vcf = os.path.join(out_dir, "sniffles", sample_name + "_tumor_genotypes.vcf")
     threads: 10,
@@ -28,7 +28,7 @@ rule genotype_tumor:
 rule genotype_normal:
     input:
         merged_vcf=os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf"),
-        normal_bam=config["normal_bam"]
+        normal_bam=config["genotype"]["normal_bam"]
     output:
         vcf = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
     threads: 10,

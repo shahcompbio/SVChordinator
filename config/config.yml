@@ -6,7 +6,7 @@ sample_name: AK-RT-004
 # filter for minda to look at SVs in regions of interest
 filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
 ## perform genotyping with sniffles2
-genotyping:
+genotype:
   activate: True
   tumor_bam: /data1/shahs3/isabl_data_lake/analyses/21/81/42181/results/minimap2/SHAH_H002191_T02_01_WG01_R1.sorted.bam
   normal_bam: /data1/shahs3/isabl_data_lake/analyses/21/80/42180/results/minimap2/SHAH_H002191_N02_01_WG01_R1.sorted.bam
