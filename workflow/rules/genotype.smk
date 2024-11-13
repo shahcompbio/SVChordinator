@@ -1,7 +1,7 @@
 # reformat minda output to conform to sniffles specifications
 rule reformat_minda:
     input:
-        merged_vcf = os.path.join(out_dir,"minda",sample_name + "_minda_ensemble.vcf"),
+        minda_vcf = os.path.join(out_dir,"minda",sample_name + "_minda_ensemble.vcf"),
     output:
         out_vcf = os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf")
     threads: 1
