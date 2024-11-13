@@ -1,8 +1,8 @@
 """
 reformat minda vcf to format that appeals to sniffles2
 """
-minda_vcf = snakemake.inputs["minda_vcf"]
-out_vcf = snakemake.outputs["out_vcf"]
+minda_vcf = snakemake.input["minda_vcf"]
+out_vcf = snakemake.output["out_vcf"]
 
 # read in vcf
 f = open(minda_vcf, "r")
