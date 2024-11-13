@@ -8,8 +8,6 @@ def get_output():
     target1 = os.path.join(out_dir, "minda", sample_name+"_minda_ensemble.vcf")
     output.append(target1)
     if config["genotype"]["activate"]:
-        target2 = os.path.join(out_dir,"sniffles", sample_name + "_tumor_genotypes.vcf")
         target3 = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
-        output.append(target2)
         output.append(target3)
     return output
