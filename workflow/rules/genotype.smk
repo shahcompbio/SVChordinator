@@ -32,17 +32,17 @@ rule genotype_normal:
 
 # genotype the consensus SVs in the tumor
 # the issue with this rule is that the SV types need to be correct to genotype properly
-# rule genotype_tumor:
-#     input:
-#         merged_vcf=os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf"),
-#         tumor_bam=config["genotype"]["tumor_bam"]
-#     output:
-#         vcf = os.path.join(out_dir, "sniffles", sample_name + "_tumor_genotypes.vcf")
-#     threads: 10,
-#     container:
-#         "docker://quay.io/biocontainers/sniffles:2.4--pyhdfd78af_0",
-#     shell:
-#         """
-#         sniffles --input {input.tumor_bam} --genotype-vcf {input.merged_vcf} \
-#         --vcf {output.vcf} --threads {threads}
-#         """
+rule genotype_tumor:
+    input:
+        merged_vcf=os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf"),
+        tumor_bam=config["genotype"]["tumor_bam"]
+    output:
+        vcf = os.path.join(out_dir, "sniffles", sample_name + "_tumor_genotypes.vcf")
+    threads: 10,
+    container:
+        "docker://quay.io/biocontainers/sniffles:2.4--pyhdfd78af_0",
+    shell:
+        """
+        sniffles --input {input.tumor_bam} --genotype-vcf {input.merged_vcf} \
+        --vcf {output.vcf} --threads {threads}
+        """
