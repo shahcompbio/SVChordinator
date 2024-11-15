@@ -60,7 +60,7 @@ rule read_support:
         time = 20,
         retries = 0
     container:
-        "docker://quay.io/biocontainers/r-tidyverse:1.2.1"
+        "docker://quay.io/preskaa/r-tidyverse:4.4.2"
     script:
         "../scripts/filter_SV.R"
 
