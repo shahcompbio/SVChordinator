@@ -13,7 +13,7 @@
 
 ## set directories
 tag=APS017.1
-pipeline_dir=$HOME/SVAnnotator
+pipeline_dir=$HOME/SVChordinator
 #logdir=${submitdir}/log
 outdir=/data1/shahs3/users/preskaa/${tag}_Archive/SVAnnotator_test
 config_yaml=config/config.yml
