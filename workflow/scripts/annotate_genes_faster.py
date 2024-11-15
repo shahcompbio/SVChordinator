@@ -36,6 +36,7 @@ def check_oncokb(gsvs, oncokb):
     gsvs["oncogene_gene2"] = gene2_oncogenes
     return gsvs
 
+
 def convert_sign(sign):
     mapping = {'+': 1, '-': -1}
     return mapping.get(sign, 0)  # Returns 0 if the sign is not "+" or "-"
@@ -47,21 +48,17 @@ def _fetch_gene_names(brk, refdat, window = 0):
     :param window: if you want to expand the search window for a gene name
     :return: hugo gene symbol and other overlapping hugo gene symbols at the position
     """
-    chrom1, pos1, strand1 = brk
+    chrom, pos, strand = brk
     ### filter by chromosome
     df = refdat[refdat["chromosome_name"] == chrom1]
     ## filter by position
     if window == 0:
-        df = df[df["start_position"] < pos1]
-        df = df[df["end_position"] > pos1]
-    ## look for upstream genes if breakpoint direction is "+"
-    elif window > 0 and strand1 > 0:
-        df = df[df["start_position"] - window < pos1]
-        df = df[df["end_position"] > pos1]
-    ## look for downstream genes if breakpoint direction is "-"
+        df = df[df["start_position"] < pos]
+        df = df[df["end_position"] > pos]
+    # expand window on either side
     else:
-        df = df[df["start_position"] < pos1]
-        df = df[df["end_position"] + window > pos1]
+        df = df[df["start_position"] - (window/2) < pos]
+        df = df[df["end_position"] + (window/2) > pos]
     ## generate gene names ...
     genes = list(df["hgnc_symbol"])
     if len(genes) == 1:
@@ -111,13 +108,11 @@ if __name__ == "__main__":
         if rix % 10 == 0: pbar.update(10)
         _, chrom1 = row["chrom1"].split("chr")
         pos1 = int(row["base1"])
-        strand1 = convert_sign(row["strand1"])
         _, chrom2 = row["chrom2"].split("chr")
         pos2 = int(row["base2"])
-        strand2 = convert_sign(row["strand2"])
         svtype = row["SV_Type"]
-       # assert (svtype=='Translocation') or (svtype!='Translocation' and chrom1==chrom2 and pos1<=pos2), row
-        brks = [(chrom1, pos1, strand1), (chrom2, pos2, strand2)]
+        # set breakpoints
+        brks = [(chrom1, pos1), (chrom2, pos2)]
         if svtype == "INS":
             gene_name = 'nan'
             window = 0 # define precision of search window ...

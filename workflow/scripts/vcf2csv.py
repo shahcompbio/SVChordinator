@@ -47,19 +47,21 @@ def proc_samples(row):
     return (has_normal,
             dict(zip(formats, tumor_gts)))
 
-## for translocations
+
 def get_chrom2_pos2(row, infos):
     assert 'SVTYPE' in infos, f'infos does not have SVTYPE:\n{row}'
+    # get for translocation
     if infos['SVTYPE'] == 'BND' or infos['SVTYPE'] == 'TRA':  # ALT: N]chrX:2212928]
         pat = re.search('[\[\]](.+):(\d+)', row['ALT'])
         assert pat
         chrom2, pos2 = pat.groups()
         print(chrom2)
-    elif 'END' in infos:
-        chrom2, pos2 = row['#CHROM'], infos['END']
+    elif infos['SVTYPE'] == 'INS':
+        chrom2, pos2 = row['#CHROM'], row['POS']
     else:
-        print(f'row:\n{row}\ninfos:\n{infos}')
-    return chrom2, int(pos2)
+        chrom2 = row['#CHROM']
+        pos2 = int(row['POS']) + int(infos['SVLEN'])
+    return chrom2, pos2
 
 
 def get_svlen(infos):
@@ -73,34 +75,23 @@ class MAF:
     def __init__(self, tumor_id, survivor=True):
         self.chrom1s = []
         self.pos1s = []
-        self.strand1s = []
         self.chrom2s = []
         self.pos2s = []
-        self.strand2s = []
         self.refs = []
         self.alts = []
         self.filters = []
         self.svtypes = []
         self.svlens = []
-        self.tumor_DRs = []
-        self.tumor_DVs = []
-        self.tumor_VAFs = []
-        self.normal_DRs = []
-        self.normal_DVs = []
-        self.normal_VAFs = []
-        self.rnames = []
-        self.sniffles_ID = []
-        if survivor:
-            self.info_keys = {'SVTYPE', 'STRANDS', }
-        else:
-            self.info_keys = {'SVTYPE', 'STRAND', }
+        self.callers = []
+        self.minda_ID = []
+        self.info_keys = {'SVLEN', 'SVTYPE', 'SUPP_VEC'}
         self.tumor_id = tumor_id  # tumor id only
         self.has_normal = False  # does GT include normal
 
     def __repr__(self):
         return f'MAF of tumor_id {self.tumor_id}'
 
-    def proc_vcf(self, vcf_path, survivor=True):
+    def proc_vcf(self, vcf_path, survivor=False):
         if vcf_path.endswith('.gz'):
             vcf_file = gzip.open(vcf_path, 'rt', encoding='utf-8')
         else:
@@ -124,98 +115,39 @@ class MAF:
 
             self.add_data(row, survivor=survivor)
 
-    def add_data(self, row, survivor=True):
+    def add_data(self, row, survivor=False):
         infos = proc_info(row)
-        self.has_normal, samples = proc_samples(row)
-        if self.has_normal:
-            tumors, normals = samples
-        else:
-            tumors = samples
         remove_sv = False
-        # if tumors['GT'] in ('./.', '.|.', '0/0', '0|0',):
-        #    remove_sv = True
         chrom2, pos2 = get_chrom2_pos2(row, infos)
         svlen = get_svlen(infos)
-        # rnames = infos['RNAMES']  # $rname1,$rname2,...
-
         assert len(self.info_keys & set(infos.keys())) == len(self.info_keys)
-        if survivor:
-            if len(infos['STRANDS']) == 2:
-                strand1, strand2 = infos['STRANDS']
-            else:
-                strand1 = strand2 = infos['STRANDS']
-        else:
-            if len(infos['STRAND']) == 2:
-                strand1, strand2 = infos['STRAND']
-            else:
-                strand1 = strand2 = infos['STRAND']
         if not remove_sv:
             self.chrom1s.append(row['#CHROM'])
             self.pos1s.append(int(row['POS']))
-            self.strand1s.append(strand1)
             self.chrom2s.append(chrom2)  # BND?
             self.pos2s.append(pos2)
-            self.strand2s.append(strand2)
+            self.minda_ID.append(row['ID'])
             self.refs.append(row['REF'])
             self.alts.append(row['ALT'])
             self.filters.append(row['FILTER'])
             self.svtypes.append(infos['SVTYPE'])
             self.svlens.append(svlen)
+            self.callers.append(infos["SUPP_VEC"])
             # self.rnames.append(rnames)
-            ## split the DR value as this has a funny format in survivor
-            if survivor:
-                self.tumor_DRs.append(np.nan)
-                self.tumor_DVs.append(np.nan)
-                self.tumor_VAFs.append(np.nan)
-                ## also add sniffles ID ....
-                sniffles_line = row['TUMOR']
-                terms = sniffles_line.split(":")
-                self.sniffles_ID.append(terms[7])
-            else:
-                _, _, DR, DV = row["TUMOR"].split(":")
-                self.tumor_DRs.append(int(DR))
-                self.tumor_DVs.append(int(DV))
-                #self.tumor_VAFs.append(infos["AF"])
-                self.sniffles_ID.append(row["ID"])
-                ## compute AF
-                if (float(DV) + float(DR)) > 0:
-                    tumor_VAF = float(DV) / (float(DV) + float(DR))
-                else:
-                    tumor_VAF = 0.0
-                self.tumor_VAFs.append(tumor_VAF)
-
-            if self.has_normal:
-                self.normal_DRs.append(int(normals['DR']))
-                self.normal_DVs.append(int(normals['DV']))
-                if (float(normals['DV']) + float(normals['DR'])) > 0:
-                    normal_VAF = float(normals['DV']) / (float(normals['DV']) + float(normals['DR']))
-                else:
-                    normal_VAF = 0.0
-                self.normal_VAFs.append(normal_VAF)
 ## for now, I'm giving this the same format as the fusions and nanomonsv
     def to_df(self):
         self.df = pd.DataFrame({
+            'minda_ID': self.minda_ID,
             'chrom1': self.chrom1s,
             'base1': self.pos1s,
-            'sniffles_ID': self.sniffles_ID,
-            'strand1': self.strand1s,
             'chrom2': self.chrom2s,
             'base2': self.pos2s,
-            'strand2': self.strand2s,
             'Ref_Seq': self.refs,
             'Alt_Seq': self.alts,
-            'FILTER': self.filters,
             'SV_Type': self.svtypes,
             'SV_LEN': self.svlens,
-            'Supporting_Read_Num_Ref': self.tumor_DRs,  # reference reads
-            'Supporting_Read_Num_Tumor': self.tumor_DVs,  # variant reads
-            'tumor_VAF': self.tumor_VAFs,
-            # actually means VAF: https://github.com/fritzsedlazeck/Sniffles/blob/313c6001421738afafcec6dbf4dd24e41223a668/src/sniffles/postprocessing.py#L273
+            'SV_callers': self.callers,
         })
-        if self.has_normal:
-            self.df['normal_DR'] = self.normal_DRs  # reference reads
-            self.df['normal_DV'] = self.normal_DVs  # variant reads
-            self.df['normal_VAF'] = self.normal_VAFs  # VAFs
 
      #   self.df['rnames'] = self.rnames
 
@@ -225,13 +157,15 @@ class MAF:
 if __name__ == "__main__":
     # args = parse_args()
     mafobj = MAF('SAMPLE', survivor=False)
-    # vcf_path = args.sniffles_vcf
     vcf_path = snakemake.input["vcf"]
+    # vcf_path = '/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/test'
     mafobj.proc_vcf(vcf_path, survivor=False)
     sniffles_maf = mafobj.to_df()
     maf = mafobj.to_df()
     maf.to_csv(snakemake.output["tsv"], sep='\t', index=False)
-    ## split into many mafs for gene annotation step
+    # csv_path = '/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/test'
+    # maf.to_csv(csv_path, sep='\t', index=False)
+    # split into many mafs for gene annotation step
     os.makedirs(snakemake.params["split_out"], exist_ok=True)
     out_paths = snakemake.output["split_tsv"]
     num_splits = len(out_paths)
@@ -243,7 +177,3 @@ if __name__ == "__main__":
         split_df = split_dfs[i]
         split_path = out_paths[i]
         split_df.to_csv(split_path, sep='\t', index=False)
-    # with open(args.rnames, 'w') as out:
-    #     for rnames in maf['rnames'].values:
-    #         lines = rnames.replace(',', '\n') + '\n'
-    #         out.write(lines)
