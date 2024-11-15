@@ -6,7 +6,7 @@ rule plot_circos:
         circos_plot = os.path.join(out_dir,"somatic_SVs",
              sample_name + ".circos.pdf")
     container:
-        "docker://quay.io/biocontainers/r-rcircos:1.1.3--r3.2.2_0"
+        "docker://quay.io/preskaa/r-rcircos:1.2.2"
     threads: 1,
     resources:
         time = 60,
