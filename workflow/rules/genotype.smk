@@ -46,3 +46,20 @@ rule genotype_tumor:
         sniffles --input {input.tumor_bam} --genotype-vcf {input.merged_vcf} \
         --vcf {output.vcf} --threads {threads}
         """
+# filter SVs post genotyping
+rule filter_SV:
+    input:
+        tumor_genotypes = os.path.join(out_dir,"sniffles",sample_name + "_tumor_genotypes.vcf"),
+        norm_genotypes = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
+    output:
+        read_support=os.path.join(out_dir, "sniffles", sample_name + "_read_support.tsv"),
+        filtered_IDs = os.path.join(out_dir, "sniffles", "filtered_IDs.tsv")
+    threads: 1,
+    resources:
+        mem_mb = 4000,
+        time = 20,
+        retries = 0
+    container:
+        "docker://quay.io/biocontainers/r-tidyverse:1.2.1"
+    script:
+        "../scripts/filter_SV.R"

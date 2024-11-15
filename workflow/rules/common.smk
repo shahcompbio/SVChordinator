@@ -9,5 +9,9 @@ def get_output():
     output.append(target1)
     if config["genotype"]["activate"]:
         target3 = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
+        target4 = os.path.join(out_dir,"sniffles",sample_name + "_tumor_genotypes.vcf")
+        target5 = os.path.join(out_dir, "sniffles", "filtered_IDs.tsv")
         output.append(target3)
+        output.append(target4)
+        output.append(target5)
     return output
