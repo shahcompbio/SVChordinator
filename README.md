@@ -1,2 +1,2 @@
 # SVAnnotator
-merge and annotate structural variants
+merge, annotate, and visualize structural variants (as "chords" in a circos plot).
