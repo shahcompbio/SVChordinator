@@ -35,7 +35,7 @@ rule annotate_genes:
 rule merge_annotated_SVs:
     input:
         split_tsvs = expand(os.path.join(out_dir,"somatic_SVs", "split_out",
-            sample_name, "output.filtered.{split}.tsv"), split=np.arange(0, 20))
+            sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
     output:
         all_SVs = os.path.join(out_dir,"somatic_SVs",
              sample_name+ ".filtered_ensemble.annotated.tsv")
