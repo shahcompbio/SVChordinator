@@ -226,7 +226,7 @@ if __name__ == "__main__":
     # args = parse_args()
     mafobj = MAF('SAMPLE', survivor=False)
     # vcf_path = args.sniffles_vcf
-    vcf_path = snakemake.input["sniffles_vcf"]
+    vcf_path = snakemake.input["vcf"]
     mafobj.proc_vcf(vcf_path, survivor=False)
     sniffles_maf = mafobj.to_df()
     maf = mafobj.to_df()

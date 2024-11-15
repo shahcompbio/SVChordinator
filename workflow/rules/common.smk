@@ -1,4 +1,6 @@
 import os
+import numpy as np
+# import config
 out_dir = config["out_dir"]
 minda_tsv = config["samples"]
 sample_name = config["sample_name"]
@@ -16,4 +18,13 @@ def get_output():
         output.append(target4)
         output.append(target5)
         output.append(target6)
+    if config["annotate"]["activate"]:
+        target7 = os.path.join(out_dir,"somatic_SVs",sample_name+ ".filtered_ensemble.tsv")
+        target8 = expand(os.path.join(out_dir,"somatic_SVs","split_out",
+            sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
+        target9 = os.path.join(out_dir,"somatic_SVs",
+             sample_name+ ".filtered_ensemble.annotated.tsv")
+        output.append(target7)
+        output.extend(target8)
+        output.append(target9)
     return output

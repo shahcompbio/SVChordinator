@@ -10,6 +10,10 @@ genotype:
   activate: True
   tumor_bam: /data1/shahs3/isabl_data_lake/analyses/21/81/42181/results/minimap2/SHAH_H002191_T02_01_WG01_R1.sorted.bam
   normal_bam: /data1/shahs3/isabl_data_lake/analyses/21/80/42180/results/minimap2/SHAH_H002191_N02_01_WG01_R1.sorted.bam
-
+# annotate genes
+annotate:
+  activate: True
+  oncokb: /home/preskaa/ont-transcript-assembly/resources/cancerGeneList.tsv
+  gene_annotation: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/Homo_sapiens.GRCh38.111.annotations-genes.txt
 
 

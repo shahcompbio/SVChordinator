@@ -53,7 +53,7 @@ rule read_support:
         norm_genotypes = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
     output:
         read_support=os.path.join(out_dir, "sniffles", sample_name + "_read_support.tsv"),
-        filtered_IDs = os.path.join(out_dir, "sniffles", "filtered_IDs.tsv")
+        filtered_IDs = os.path.join(out_dir, "sniffles", sample_name + "_filtered_IDs.tsv")
     threads: 1,
     resources:
         mem_mb = 4000,
@@ -67,7 +67,7 @@ rule read_support:
 rule filter_minda:
   input:
     vcf = os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf"),
-    somatic = os.path.join(out_dir, "sniffles", "filtered_IDs.tsv")
+    somatic = os.path.join(out_dir, "sniffles", sample_name+ "_filtered_IDs.tsv")
   output:
     vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf")
   threads: 1,

@@ -5,8 +5,8 @@ library(data.table)
 # paths
 sniffles_tumor_path <- snakemake@input[["tumor_genotypes"]]
 sniffles_norm_path <- snakemake@input[["norm_genotypes"]]
-somatic_ids <- snakemake@output[["filtered_IDs"]]
-read_support <- snakemake@output[["read_support"]]
+somatic_id_table <- snakemake@output[["filtered_IDs"]]
+read_support_table <- snakemake@output[["read_support"]]
 
 # normal genotyping
 norm_vcf <- read.table(sniffles_norm_path, comment.char = "#")
@@ -34,13 +34,12 @@ read_support <- tumor_genotypes %>%
   inner_join(norm_genotypes, by = "V3") %>%
   rename(ID = V3)
 
-"
-Let's filter out those SVs with the following:
+# Let's filter out those SVs with the following:
 
-1. < 5 read coverage in tumor or normal
-2. > 0 reads in the normal
-3. 0 supporting reads in the tumor
-"
+# 1. < 5 read coverage in tumor or normal
+# 2. > 0 reads in the normal
+# 3. 0 supporting reads in the tumor
+
 somatic_ids <- read_support %>%
   filter(ID %in% read_support$ID,
          norm_variant_reads == 0,
@@ -50,7 +49,7 @@ somatic_ids <- read_support %>%
   select(ID)
 
 # Write out to file
-write.table(somatic_ids, file = "somatic_ids", sep = "\t", col.names = F, row.names = F, quote = F)
+write.table(somatic_ids, file = somatic_id_table, sep = "\t", col.names = F, row.names = F, quote = F)
 
 # write read support table
-write.table(read_support, file = "sniffles_read_support.tsv", sep = "\t", col.names = F, row.names = F, quote = F)
+write.table(read_support, file = read_support_table, sep = "\t", col.names = F, row.names = F, quote = F)
