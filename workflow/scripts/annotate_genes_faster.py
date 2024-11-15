@@ -48,7 +48,7 @@ def _fetch_gene_names(brk, refdat, window = 0):
     :param window: if you want to expand the search window for a gene name
     :return: hugo gene symbol and other overlapping hugo gene symbols at the position
     """
-    chrom, pos, strand = brk
+    chrom, pos = brk
     ### filter by chromosome
     df = refdat[refdat["chromosome_name"] == chrom1]
     ## filter by position

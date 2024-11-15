@@ -41,5 +41,10 @@ rule merge_annotated_SVs:
              sample_name+ ".filtered_ensemble.annotated.tsv")
     singularity:
         "docker://quay.io/preskaa/annotate_genes:v240817"
+    threads: 1,
+    resources:
+        time = 60,
+        mem_mb = 10000,
+        retries = 0,
     script:
         "../scripts/merge_annotated_svs.py"
