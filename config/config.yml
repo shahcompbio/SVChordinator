@@ -13,7 +13,7 @@ genotype:
 # annotate genes
 annotate:
   activate: True
-  oncokb: /home/preskaa/ont-transcript-assembly/resources/cancerGeneList.tsv
+  oncokb: /data1/shahs3/reference/ref-sarcoma/241115_oncokb_cancerGeneList.tsv
   gene_annotation: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/Homo_sapiens.GRCh38.111.annotations-genes.txt
 
 
