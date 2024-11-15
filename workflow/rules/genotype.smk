@@ -46,8 +46,8 @@ rule genotype_tumor:
         sniffles --input {input.tumor_bam} --genotype-vcf {input.merged_vcf} \
         --vcf {output.vcf} --threads {threads}
         """
-# filter SVs post genotyping
-rule filter_SV:
+# collect read support and get IDs that make the final cut
+rule read_support:
     input:
         tumor_genotypes = os.path.join(out_dir,"sniffles",sample_name + "_tumor_genotypes.vcf"),
         norm_genotypes = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
@@ -63,3 +63,19 @@ rule filter_SV:
         "docker://quay.io/biocontainers/r-tidyverse:1.2.1"
     script:
         "../scripts/filter_SV.R"
+
+rule filter_minda:
+  input:
+    vcf = os.path.join(out_dir, "sniffles", sample_name + "_sniffles_ensemble.vcf"),
+    somatic = os.path.join(out_dir, "sniffles", "filtered_IDs.tsv")
+  output:
+    vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf")
+  threads: 1,
+  resources:
+    mem_mb = 4000,
+    time = 20,
+    retries = 0
+  container:
+    "docker://quay.io/biocontainers/bcftools:1.21--h8b25389_0"
+  shell:
+    "bcftools view -i 'ID=@{input.somatic}' {input.vcf} | bcftools view -i 'FILTER=\"PASS\"' > {output.vcf}"

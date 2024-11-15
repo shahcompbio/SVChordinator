@@ -11,7 +11,9 @@ def get_output():
         target3 = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
         target4 = os.path.join(out_dir,"sniffles",sample_name + "_tumor_genotypes.vcf")
         target5 = os.path.join(out_dir, "sniffles", "filtered_IDs.tsv")
+        target6 = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf")
         output.append(target3)
         output.append(target4)
         output.append(target5)
+        output.append(target6)
     return output
