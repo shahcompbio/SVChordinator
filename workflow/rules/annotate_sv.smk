@@ -39,7 +39,7 @@ rule merge_annotated_SVs:
     output:
         all_SVs = os.path.join(out_dir,"somatic_SVs",
              sample_name+ ".filtered_ensemble.annotated.tsv")
-    singularity:
+    container:
         "docker://quay.io/preskaa/annotate_genes:v240817"
     threads: 1,
     resources:

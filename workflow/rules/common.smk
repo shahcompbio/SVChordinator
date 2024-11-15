@@ -27,4 +27,8 @@ def get_output():
         output.append(target7)
         output.extend(target8)
         output.append(target9)
+    if config["visualize"]["activate"]:
+        target10  = os.path.join(out_dir,"somatic_SVs",
+             sample_name + ".circos.pdf")
+        output.append(target10)
     return output

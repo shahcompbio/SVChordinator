@@ -9,6 +9,7 @@ include: "rules/common.smk"
 include: "rules/sv_merge.smk"
 include: "rules/genotype.smk"
 include: "rules/annotate_sv.smk"
+include: "rules/visualize.smk"
 
 ### target_rules ####
 rule all:
