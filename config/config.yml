@@ -2,14 +2,14 @@
 ## will add later ....
 samples: config/samples.tsv
 out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/SVAnnotator_test
-sample_name: AK-RT-004
+sample_name: sample
 # filter for minda to look at SVs in regions of interest
 filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
 ## perform genotyping with sniffles2 to extract read support from normal
 genotype:
   activate: True
-  tumor_bam: /data1/shahs3/isabl_data_lake/analyses/21/81/42181/results/minimap2/SHAH_H002191_T02_01_WG01_R1.sorted.bam
-  normal_bam: /data1/shahs3/isabl_data_lake/analyses/21/80/42180/results/minimap2/SHAH_H002191_N02_01_WG01_R1.sorted.bam
+  tumor_bam: /path/to/tumor_bam
+  normal_bam: /path/to/normal_bam
 # annotate genes
 annotate:
   activate: True
