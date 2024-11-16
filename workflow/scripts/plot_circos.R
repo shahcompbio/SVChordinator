@@ -1,4 +1,5 @@
 library(RCircos)
+library(dplyr)
 
 # paths
 sv.data.path <- snakemake@input[["annotated_SVs"]]
