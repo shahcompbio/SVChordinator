@@ -40,10 +40,12 @@ read_support <- tumor_genotypes %>%
 # 2. > 0 reads in the normal
 # 3. 0 supporting reads in the tumor
 
+# apparently there is a bug in sniffles2 genotyping for large deletions; will put back in once we've confirmed it's working:
+# https://github.com/fritzsedlazeck/Sniffles/issues/505
 somatic_ids <- read_support %>%
   filter(ID %in% read_support$ID,
          norm_variant_reads == 0,
-         tumor_variant_reads > 0,
+         # tumor_variant_reads > 0,
          tumor_coverage >= 5,
          norm_coverage >=5) %>%
   select(ID)
@@ -52,4 +54,4 @@ somatic_ids <- read_support %>%
 write.table(somatic_ids, file = somatic_id_table, sep = "\t", col.names = F, row.names = F, quote = F)
 
 # write read support table
-write.table(read_support, file = read_support_table, sep = "\t", col.names = F, row.names = F, quote = F)
+write.table(read_support, file = read_support_table, sep = "\t")

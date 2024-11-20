@@ -50,7 +50,7 @@ def _fetch_gene_names(brk, refdat, window = 0):
     """
     chrom, pos = brk
     ### filter by chromosome
-    df = refdat[refdat["chromosome_name"] == chrom1]
+    df = refdat[refdat["chromosome_name"] == chrom]
     ## filter by position
     if window == 0:
         df = df[df["start_position"] < pos]
@@ -75,20 +75,21 @@ def _fetch_gene_names(brk, refdat, window = 0):
 if __name__ == "__main__":
     ## testing .....
 
-    # gene_annotation = os.path.expanduser(
-    #     "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
-    #     "APS010.1_A673_proteome/fusion_SV_analysis/Homo_sapiens.GRCh38.111.annotations-genes.txt")
-    # nanomonsvcalls = os.path.expanduser(
-    #     "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
-    #     "APS010.1_A673_proteome/fusion_SV_analysis/merged_output.filtered.tsv")
-    # test_out = os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
-    #                               "APS010.1_A673_proteome/fusion_SV_analysis/merged_output.annotated.filtered.tsv")
-    # oncokb = os.path.expanduser("~/PycharmProjects/nanosavana/resources/cancerGeneList.tsv")
+    gene_annotation = os.path.expanduser(
+        "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
+        "APS010.1_A673_proteome/fusion_SV_analysis/Homo_sapiens.GRCh38.111.annotations-genes.txt")
+    nanomonsvcalls = os.path.expanduser(
+        "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
+        "APS017.1_3x3_SV_analysis/annotation_bug/SHAH_H003842_T01_01_WG02.filtered_ensemble.tsv")
+    test_out = os.path.expanduser(
+        "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
+        "APS017.1_3x3_SV_analysis/annotation_bug/SHAH_H003842_T01_01_WG02.filtered_ensemble.annotated.tsv")
+    oncokb = os.path.expanduser("~/PycharmProjects/nanosavana/resources/cancerGeneList.tsv")
 
-    gene_annotation = snakemake.params["annotations"]
-    nanomonsvcalls = snakemake.input["split_tsv"]
-    test_out = snakemake.output["split_tsv"]
-    oncokb = snakemake.params["oncokb"]
+    # gene_annotation = snakemake.params["annotations"]
+    # nanomonsvcalls = snakemake.input["split_tsv"]
+    # test_out = snakemake.output["split_tsv"]
+    # oncokb = snakemake.params["oncokb"]
     """""
     attempt 2
     """""

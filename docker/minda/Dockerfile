@@ -13,3 +13,7 @@ RUN conda env create --name minda --file environment.yml
 # Activate conda environment
 RUN echo "conda activate minda" >> ~/.bashrc
 ENV PATH /opt/conda/envs/minda/bin:$PATH
+
+# Install additional packages in the "minda" environment
+RUN conda install -n minda -c conda-forge intervaltree -y
+
