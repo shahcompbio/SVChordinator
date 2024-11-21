@@ -63,7 +63,7 @@ rule variants2table:
     input:
         vcf = _fetch_vcf
     output:
-        tsv = os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ "{caller}.tsv")
+        tsv = os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ ".{caller}.tsv")
     container:
         "docker://quay.io/biocontainers/gatk4:4.6.1.0--py310hdfd78af_0"
     threads: 1
@@ -72,6 +72,6 @@ rule variants2table:
         mem_mb = 4000,
         retries = 0,
     shell:
-        "gatk VariantsToTable -V severus_AK-RT-004.vcf "
-        "-F CHROM -F POS -F ID -F STRANDS -O severus_AK-RT-004.tsv"
+        "gatk VariantsToTable -V {input.vcf} "
+        "-F CHROM -F POS -F ID -F STRANDS -O {output.tsv}"
 

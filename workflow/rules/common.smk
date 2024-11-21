@@ -24,6 +24,7 @@ def extract_individual_calls(minda_tsv):
 
 # extract individual caller paths
 caller_df, callers = extract_individual_calls(minda_tsv)
+print(callers)
 
 def get_output():
     """
