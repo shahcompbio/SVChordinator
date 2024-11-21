@@ -1,15 +1,15 @@
 ## example boiler plate config; will update as pipeline progresses
 ## will add later ....
-samples: config/samples.tsv
-out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/SVAnnotator_test
+samples: config/AK-RT-003_samples.tsv
+out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/SVChordinator_test
 sample_name: sample
 # filter for minda to look at SVs in regions of interest
 filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
 ## perform genotyping with sniffles2 to extract read support from normal
 genotype:
   activate: True
-  tumor_bam: /path/to/tumor_bam
-  normal_bam: /path/to/normal_bam
+  tumor_bam: /data1/shahs3/isabl_data_lake/analyses/21/78/42178/results/minimap2/SHAH_H002190_T02_01_WG01_R1.sorted.bam
+  normal_bam: /data1/shahs3/isabl_data_lake/analyses/21/79/42179/results/minimap2/SHAH_H002190_N02_01_WG01_R1.sorted.bam
 # annotate genes
 annotate:
   activate: True
