@@ -20,7 +20,7 @@ def extract_individual_calls(minda_tsv):
     df = pd.read_csv(minda_tsv, sep="\t")
     df.columns = ["vcf_path", "caller", "nickname"]
     callers = list(df["caller"])
-    return caller_df, callers
+    return df, callers
 
 # extract individual caller paths
 caller_df, callers = extract_individual_calls(minda_tsv)
