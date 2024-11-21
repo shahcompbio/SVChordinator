@@ -29,7 +29,7 @@ def extract_individual_calls(minda_tsv):
     return caller_dict, callers
 
 # extract individual caller paths
-caller_dict, callers = extract_individual_calls
+caller_dict, callers = extract_individual_calls(minda_tsv)
 
 def get_output():
     """
