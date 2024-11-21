@@ -55,7 +55,9 @@ rule merge_annotated_SVs:
 # convert vcfs to tsvs from each caller
 
 def _fetch_vcf(wildcards):
-    return caller_dict[wildcards.caller]["vcf_path"]
+    df = caller_df[caller_df["caller"] == wildcards.caller]
+    assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
+    return list(df["vcf_path"])[0]
 
 rule variants2table:
     input:
