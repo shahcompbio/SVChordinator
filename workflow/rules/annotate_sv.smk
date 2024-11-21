@@ -1,6 +1,4 @@
 # convert sniffles-format vcf to a tsv
-from jupyter_server.utils import fetch
-
 rule convert_vcf:
     input:
         vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf"),
