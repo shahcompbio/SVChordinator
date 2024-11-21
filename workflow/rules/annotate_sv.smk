@@ -73,5 +73,5 @@ rule variants2table:
         retries = 0,
     shell:
         "gatk VariantsToTable -V {input.vcf} "
-        "-F CHROM -F POS -F ID -F STRANDS -O {output.tsv}"
+        "-F CHROM -F POS -F ID -F STRANDS -O {output.tsv}  --verbosity ERROR"
 
