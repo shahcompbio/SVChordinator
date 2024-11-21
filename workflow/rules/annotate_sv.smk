@@ -59,7 +59,7 @@ def _fetch_vcf(wildcards):
 
 rule variants2table:
     input:
-        vcf = _fetch_vcf()
+        vcf = _fetch_vcf
     output:
         tsv = os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ "{caller}.tsv")
     container:
