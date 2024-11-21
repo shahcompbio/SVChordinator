@@ -72,6 +72,10 @@ rule variants2table:
         mem_mb = 4000,
         retries = 0,
     shell:
-        "gatk VariantsToTable -V {input.vcf} "
-        "-F CHROM -F POS -F ID -F STRANDS -O {output.tsv}  --verbosity ERROR"
+        """
+        set +o pipefail
+        gatk VariantsToTable -V {input.vcf} \
+                             -F CHROM -F POS -F ID -F STRANDS \
+                             -O {output.tsv}
+        """
 
