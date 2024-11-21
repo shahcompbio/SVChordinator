@@ -1,4 +1,6 @@
-## convert sniffles vcf to a tsv
+# convert sniffles-format vcf to a tsv
+from jupyter_server.utils import fetch
+
 rule convert_vcf:
     input:
         vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf"),
@@ -48,3 +50,28 @@ rule merge_annotated_SVs:
         retries = 0,
     script:
         "../scripts/merge_annotated_svs.py"
+
+# attempt to annotate any "unresolved" breakpoints (i.e., BND variants)
+# https://gatk.broadinstitute.org/hc/en-us/articles/9022476791323-Structural-Variants
+
+# convert vcfs to tsvs from each caller
+
+def _fetch_vcf(wildcards):
+    return caller_dict[wildcards.caller]["vcf_path"]
+
+rule variants2table:
+    input:
+        vcf = _fetch_vcf()
+    output:
+        tsv = os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ "{caller}.tsv")
+    container:
+        "docker://quay.io/biocontainers/gatk4:4.6.1.0--py310hdfd78af_0"
+    threads: 1
+    resources:
+        time = 20,
+        mem_mb = 4000,
+        retries = 0,
+    shell:
+        "gatk VariantsToTable -V severus_AK-RT-004.vcf "
+        "-F CHROM -F POS -F ID -F STRANDS -O severus_AK-RT-004.tsv"
+

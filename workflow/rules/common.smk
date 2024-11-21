@@ -1,11 +1,41 @@
 import os
 import numpy as np
-# import config
+import pandas as pd
+
+### paths ###
 out_dir = config["out_dir"]
 minda_tsv = config["samples"]
 sample_name = config["sample_name"]
 
+
+
+### helper functions ###
+
+def extract_individual_calls(minda_tsv):
+    """
+    extract a dict of info for each individual set of SV calls
+    :param minda_tsv: input file for minda
+    :return: pandas dataframe of vcf paths, names of individual callers
+    """
+    df = pd.read_csv(minda_tsv, sep="\t")
+    df.columns = ["vcf_path", "caller", "nickname"]
+    callers = list(df["caller"])
+    # Create the dictionary
+    caller_dict = (
+        df.groupby("caller")
+        .apply(lambda x: x[["nickname", "vcf_path"]].to_dict(orient="records"))
+        .to_dict()
+    )
+    return caller_dict, callers
+
+# extract individual caller paths
+caller_dict, callers = extract_individual_calls
+
 def get_output():
+    """
+    returns targets for rule all
+    :return:
+    """
     output = []
     target1 = os.path.join(out_dir, "minda", sample_name+"_minda_ensemble.vcf")
     output.append(target1)
@@ -24,11 +54,15 @@ def get_output():
             sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
         target9 = os.path.join(out_dir,"somatic_SVs",
              sample_name+ ".filtered_ensemble.annotated.tsv")
+        target10 = expand(os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ "{caller}.tsv"),
+            caller=callers)
         output.append(target7)
         output.extend(target8)
         output.append(target9)
+        output.append(target10)
     if config["visualize"]["activate"]:
         target10  = os.path.join(out_dir,"somatic_SVs",
              sample_name + ".circos.pdf")
         output.append(target10)
     return output
+

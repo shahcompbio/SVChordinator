@@ -65,10 +65,7 @@ def get_chrom2_pos2(row, infos):
 
 
 def get_svlen(infos):
-    if infos['SVTYPE'] == 'BND':
-        return 3e9
-    else:
-        return abs(int(infos['SVLEN']))
+        return int(infos['SVLEN'])
 
 
 class MAF:
