@@ -17,7 +17,7 @@ def extract_individual_calls(minda_tsv):
     :param minda_tsv: input file for minda
     :return: pandas dataframe of vcf paths, names of individual callers
     """
-    df = pd.read_csv(minda_tsv, sep="\t")
+    df = pd.read_csv(minda_tsv, sep="\t", header=None)
     df.columns = ["vcf_path", "caller", "nickname"]
     callers = list(df["caller"])
     return df, callers
@@ -49,7 +49,7 @@ def get_output():
             sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
         target9 = os.path.join(out_dir,"somatic_SVs",
              sample_name+ ".filtered_ensemble.annotated.tsv")
-        target10 = expand(os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ "{caller}.tsv"),
+        target10 = expand(os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ ".{caller}.tsv"),
             caller=callers)
         output.append(target7)
         output.extend(target8)
