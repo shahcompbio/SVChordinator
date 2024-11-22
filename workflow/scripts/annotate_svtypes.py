@@ -5,18 +5,6 @@ import numpy as np
 input_svtable = snakemake.input["all_SVs"]
 caller_tables = snakemake.input["caller_tables"]
 out_svtable = snakemake.output["all_SVs"]
-# test paths
-# input_svtable = ("/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/"
-#                  "lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/somatic_SVs"
-#                  "/sample.filtered_ensemble.annotated.tsv")
-# caller_tables = [
-#     "/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/raw_SVs/sample/sample.nanomonsv.tsv",
-#     "/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/raw_SVs/sample/sample.SAVANA.tsv",
-#     "/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/raw_SVs/sample/sample.Severus.tsv"
-# ]
-# out_svtable = ("/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/"
-#                  "lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/somatic_SVs"
-#                  "/test.reannotated.tsv")
 
 def get_bp_ids(call_ids):
     """
