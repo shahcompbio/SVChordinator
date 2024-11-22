@@ -1,5 +1,5 @@
 # convert sniffles-format vcf to a tsv
-rule convert_vcf:
+rule convert_ensemble_vcf:
     input:
         vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf"),
     output:
@@ -65,7 +65,7 @@ rule variants2table:
     output:
         tsv = os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ ".{caller}.tsv")
     container:
-        "docker://quay.io/biocontainers/gatk4:4.6.1.0--py310hdfd78af_0"
+        "docker://quay.io/biocontainers/bcftools:1.21--h8b25389_0"
     threads: 1
     resources:
         time = 20,
@@ -73,9 +73,6 @@ rule variants2table:
         retries = 0,
     shell:
         """
-        set +o pipefail
-        gatk VariantsToTable -V {input.vcf} \
-                             -F CHROM -F POS -F ID -F STRANDS \
-                             -O {output.tsv}
+        bcftools query -f '%CHROM\t%POS\t%ID\t%INFO/SVTYPE\t%INFO/STRANDS\n' {input.vcf} -u -H -o {output.tsv}
         """
 
