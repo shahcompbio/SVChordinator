@@ -37,8 +37,8 @@ rule merge_annotated_SVs:
         split_tsvs = expand(os.path.join(out_dir,"somatic_SVs", "split_out",
             sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
     output:
-        all_SVs = os.path.join(out_dir,"somatic_SVs",
-             sample_name+ ".filtered_ensemble.annotated.tsv")
+        all_SVs = temp(os.path.join(out_dir,"somatic_SVs",
+             sample_name+ ".filtered_ensemble.temp.annotated.tsv"))
     container:
         "docker://quay.io/preskaa/annotate_genes:v240817"
     threads: 1,
@@ -75,4 +75,24 @@ rule variants2table:
         """
         bcftools query -f '%CHROM\t%POS\t%ID\t%INFO/SVTYPE\t%INFO/STRANDS\n' {input.vcf} -u -H -o {output.tsv}
         """
+
+rule annotate_svtypes:
+    input:
+        all_SVs = os.path.join(out_dir,"somatic_SVs",
+            sample_name + ".filtered_ensemble.temp.annotated.tsv"),
+        caller_tables = expand(os.path.join(out_dir, "raw_SVs",
+            sample_name, sample_name+ ".{caller}.tsv"), caller=callers),
+    output:
+        all_SVs = os.path.join(out_dir,"somatic_SVs",
+            sample_name + ".filtered_ensemble.annotated.tsv")
+    container:
+        "docker://quay.io/preskaa/annotate_genes:v240817"
+    threads: 1,
+    resources:
+        time = 60,
+        mem_mb = 10000,
+        retries = 0,
+    script:
+        "../scripts/annotate_svtypes.py"
+
 
