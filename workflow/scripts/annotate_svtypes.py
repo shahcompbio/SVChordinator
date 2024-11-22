@@ -26,7 +26,7 @@ for i in np.arange(0, len(caller_tables)):
     caller_table["caller"] = "caller_{i}".format(i=i)
     all_callers = pd.concat([all_callers, caller_table])
 # rename columns
-all_callers.columns = ["chrom", "pos", "ID", "SV_Type", "Strands", "caller"]
+all_callers.columns = ["chrom", "pos", "ID", "SV_Type", "Strands", "BP_notation", "caller"]
 # load input table of consensus SV calls
 all_svtable = pd.read_csv(input_svtable, sep="\t")
 # search for BNDs (the unresolved breakpoint)
