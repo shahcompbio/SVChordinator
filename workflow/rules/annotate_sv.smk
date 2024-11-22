@@ -73,7 +73,7 @@ rule variants2table:
         retries = 0,
     shell:
         """
-        bcftools query -f '%CHROM\t%POS\t%ID\t%INFO/SVTYPE\t%INFO/STRANDS\n' {input.vcf} -u -H -o {output.tsv}
+        bcftools query -f '%CHROM\t%POS\t%ID\t%INFO/SVTYPE\t%INFO/STRANDSt%INFO/BP_NOTATION\n' {input.vcf} -u -H -o {output.tsv}
         """
 
 rule annotate_svtypes:
