@@ -18,6 +18,19 @@ out_svtable = snakemake.output["all_SVs"]
 #                  "lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/somatic_SVs"
 #                  "/test.reannotated.tsv")
 
+def get_bp_ids(call_ids):
+    """
+    get breakpoint ids from individual callers
+    :param call_ids: bp ids from minda output
+    :return: list of bp ids
+    """
+    bp_ids = []
+    for call in call_ids:
+        terms = call.split("_")
+        bp_id = "_".join(terms[1:])
+        bp_ids.append(bp_id)
+        return bp_ids
+
 # load in the input from the different individual callers as one unified pandas dataframe
 all_callers = pd.DataFrame()
 for i in np.arange(0, len(caller_tables)):
@@ -27,6 +40,13 @@ for i in np.arange(0, len(caller_tables)):
     all_callers = pd.concat([all_callers, caller_table])
 # rename columns
 all_callers.columns = ["chrom", "pos", "ID", "SV_Type", "Strands", "BP_notation", "caller"]
+# fix the strands by combine the columns
+all_callers["Strands"] = all_callers.apply(
+    lambda row: row["Strands"] if row["Strands"] != "." else row["BP_notation"],
+    axis=1
+)
+# Drop the original BP_notation column if no longer needed
+all_callers = all_callers.drop(columns=["BP_notation"])
 # load input table of consensus SV calls
 all_svtable = pd.read_csv(input_svtable, sep="\t")
 # search for BNDs (the unresolved breakpoint)
@@ -41,11 +61,7 @@ sv_types = []
 for i, row in unresolved_table.iterrows():
     call_ids = row["SV_callers"].split(",")
     # get breakpoint ids
-    bp_ids = []
-    for call in call_ids:
-        terms = call.split("_")
-        bp_id = "_".join(terms[1:])
-        bp_ids.append(bp_id)
+    bp_ids = get_bp_ids(call_ids)
     # search for these ids in the all_callers table
     bp_df = all_callers[all_callers["ID"].isin(bp_ids)]
     # iterate through until we can annotate
@@ -74,6 +90,44 @@ reannotated_table["SV_Type"] = sv_types
 resolved_table = all_svtable[all_svtable["SV_Type"] != "BND"]
 # add translocations
 final_table = pd.concat([resolved_table, tra_table, reannotated_table])
+# get strands for final table to make compatible with recon plot package
+strand_table = all_callers[all_callers["Strands"]!= "."]
+strand_list = []
+for _, row in final_table.iterrows():
+    if row["SV_Type"] == "INS":
+        strand = "INS"
+    elif row["SV_Type"] == "DEL":
+        strand = "+-"
+    else:
+        call_ids = row["SV_callers"].split(",")
+        # get breakpoint ids
+        bp_ids = get_bp_ids(call_ids)
+        bp_df = strand_table[strand_table["ID"].isin(bp_ids)]
+        strand = "."
+        i = 0
+        while strand == "." and i < len(bp_df):
+            bp_row = bp_df.iloc[i]
+            strand = bp_row["Strands"]
+    strand_list.append(strand)
+final_table["strands"] = strand_list
+# rearrange table to make pretty
+col_order = ["minda_ID",
+             "chrom1",
+             "base1",
+             "chrom2",
+             "base2",
+             "strands",
+             "Ref_Seq",
+             "Alt_Seq",
+             "SV_Type",
+             "SV_LEN",
+             "SV_callers",
+             "gene_name_1",
+             "alt_gene_name_1",
+             "gene_name_2",
+             "alt_gene_name_2",
+             "oncogene_gene1",
+             "oncogene_gene2"]
 # write output
 final_table.to_csv(out_svtable, sep="\t", index=False)
 

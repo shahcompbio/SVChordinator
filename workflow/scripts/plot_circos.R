@@ -34,12 +34,14 @@ for (i in 1:length(sv_types)){
   } else if (sv_type == "DEL") {
      link.color <- pal[2]
     }
-     else if (sv_type == "BND"){
+     else if (sv_type == "TRA"){
       link.color <- pal[3]
     } else if (sv_type == "INV"){
       link.color <- pal[4]
     } else if (sv_type == "DUP"){
       link.color <- pal[5]
+  } else if (sv_type == "BND"){
+    link.color <- pal[6]
   }
   link.colors <- c(link.colors, link.color)
   link.widths[i] <- 1.5
@@ -68,7 +70,7 @@ track.num <- 2;
 RCircos.Gene.Name.Plot(sv.gene.data,name.col,track.num, side);
 
 # Add a legend for the colors
-legend("topright", legend = c("Insertion", "Deletion", "Translocation", "Inversion", "Duplication"),
-       fill = pal[1:5],
-       title = "Band Colors", cex = 0.8)
+legend("topright", legend = c("Insertion", "Deletion", "Translocation", "Inversion", "Duplication", "Breakends"),
+       fill = pal[1:6],
+       title = "Chord colors", cex = 0.8)
 
