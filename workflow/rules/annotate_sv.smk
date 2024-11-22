@@ -26,6 +26,7 @@ rule annotate_genes:
         annotations = config["annotate"]["gene_annotation"]
     resources:
         time = 360,
+        retries = 1,
     singularity:
         "docker://quay.io/preskaa/annotate_genes:v240817"
     script:
