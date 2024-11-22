@@ -43,7 +43,7 @@ rule merge_annotated_SVs:
         "docker://quay.io/preskaa/annotate_genes:v240817"
     threads: 1,
     resources:
-        time = 60,
+        time = 20,
         mem_mb = 10000,
         retries = 0,
     script:
