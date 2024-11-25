@@ -1,3 +1,5 @@
+import os.path
+
 import pandas as pd
 import numpy as np
 
@@ -6,17 +8,16 @@ input_svtable = snakemake.input["all_SVs"]
 caller_tables = snakemake.input["caller_tables"]
 out_svtable = snakemake.output["all_SVs"]
 # test paths
-# input_svtable = ("/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/"
-#                  "lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/somatic_SVs"
-#                  "/sample.filtered_ensemble.annotated.tsv")
+# input_svtable = os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/"
+#                                    "somatic_SVs/SHAH_H003842_T01_01_WG02.filtered_ensemble.annotated.tsv")
 # caller_tables = [
-#     "/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/raw_SVs/sample/sample.nanomonsv.tsv",
-#     "/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/raw_SVs/sample/sample.SAVANA.tsv",
-#     "/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/raw_SVs/sample/sample.Severus.tsv"
+#     os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/raw_SVs/SHAH_H003842_T01_01_WG02/SHAH_H003842_T01_01_WG02.nanomonsv.tsv"),
+#     os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/raw_SVs/SHAH_H003842_T01_01_WG02/SHAH_H003842_T01_01_WG02.SAVANA.tsv"),
+#     os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/raw_SVs/SHAH_H003842_T01_01_WG02/SHAH_H003842_T01_01_WG02.Severus.tsv")
 # ]
-# out_svtable = ("/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/"
-#                  "lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/SVChordinator_test/somatic_SVs"
-#                  "/test.reannotated.tsv")
+# out_svtable = os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/"
+#                  "lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/"
+#                                  "strands/test.reannotated.tsv")
 
 def get_bp_ids(call_ids):
     """
@@ -29,7 +30,7 @@ def get_bp_ids(call_ids):
         terms = call.split("_")
         bp_id = "_".join(terms[1:])
         bp_ids.append(bp_id)
-        return bp_ids
+    return bp_ids
 
 # load in the input from the different individual callers as one unified pandas dataframe
 all_callers = pd.DataFrame()
@@ -108,6 +109,7 @@ for _, row in final_table.iterrows():
         while strand == "." and i < len(bp_df):
             bp_row = bp_df.iloc[i]
             strand = bp_row["Strands"]
+            i = i + 1
     strand_list.append(strand)
 final_table["strands"] = strand_list
 # rearrange table to make pretty
