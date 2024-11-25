@@ -1,3 +1,5 @@
+import os.path
+
 import pandas as pd
 import numpy as np
 
@@ -5,6 +7,17 @@ import numpy as np
 input_svtable = snakemake.input["all_SVs"]
 caller_tables = snakemake.input["caller_tables"]
 out_svtable = snakemake.output["all_SVs"]
+# test paths
+# input_svtable = os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/"
+#                                    "somatic_SVs/SHAH_H003842_T01_01_WG02.filtered_ensemble.annotated.tsv")
+# caller_tables = [
+#     os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/raw_SVs/SHAH_H003842_T01_01_WG02/SHAH_H003842_T01_01_WG02.nanomonsv.tsv"),
+#     os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/raw_SVs/SHAH_H003842_T01_01_WG02/SHAH_H003842_T01_01_WG02.SAVANA.tsv"),
+#     os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/strands/TCDO-SAR-061/results/raw_SVs/SHAH_H003842_T01_01_WG02/SHAH_H003842_T01_01_WG02.Severus.tsv")
+# ]
+# out_svtable = os.path.expanduser("~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/"
+#                  "lab_notebook/APS017.1_3x3_SV_analysis/SVChordinator_troubleshoot/"
+#                                  "strands/test.reannotated.tsv")
 
 def get_bp_ids(call_ids):
     """
@@ -17,7 +30,7 @@ def get_bp_ids(call_ids):
         terms = call.split("_")
         bp_id = "_".join(terms[1:])
         bp_ids.append(bp_id)
-        return bp_ids
+    return bp_ids
 
 # load in the input from the different individual callers as one unified pandas dataframe
 all_callers = pd.DataFrame()
@@ -41,7 +54,7 @@ all_svtable = pd.read_csv(input_svtable, sep="\t")
 bnd_table = all_svtable[all_svtable["SV_Type"] == "BND"]
 # reannotate translocations first because they're easy
 tra_table = bnd_table[bnd_table["chrom1"] != bnd_table["chrom2"]]
-tra_table["SV_Type"] = "TRA"
+tra_table = tra_table[tra_table["SV_Type"] == "TRA"]
 # now let's re-annotate unresolved breakpoints to their closest match
 # based on strands and annotation from individual callers
 unresolved_table = bnd_table[bnd_table["chrom1"] == bnd_table["chrom2"]]
@@ -96,6 +109,7 @@ for _, row in final_table.iterrows():
         while strand == "." and i < len(bp_df):
             bp_row = bp_df.iloc[i]
             strand = bp_row["Strands"]
+            i = i + 1
     strand_list.append(strand)
 final_table["strands"] = strand_list
 # rearrange table to make pretty
