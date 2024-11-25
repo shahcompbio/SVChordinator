@@ -43,7 +43,7 @@ all_svtable = pd.read_csv(input_svtable, sep="\t")
 bnd_table = all_svtable[all_svtable["SV_Type"] == "BND"]
 # reannotate translocations first because they're easy
 tra_table = bnd_table[bnd_table["chrom1"] != bnd_table["chrom2"]]
-tra_table = tra_table[tra_table["SV_Type"] == "TRA"]
+tra_table["SV_Type"] = "TRA"
 # now let's re-annotate unresolved breakpoints to their closest match
 # based on strands and annotation from individual callers
 unresolved_table = bnd_table[bnd_table["chrom1"] == bnd_table["chrom2"]]
