@@ -38,8 +38,8 @@ rule annotate_genes:
         split_tsv = os.path.join(out_dir,"somatic_SVs","split_out",
             sample_name, "output.filtered.annotated.{split}.tsv")
     params:
-        oncokb = config["annotate"]["oncokb"],
-        annotations = config["annotate"]["gene_annotation"]
+        oncokb = oncokb,
+        annotations = gene_annotations
     resources:
         time = 360,
         retries = 1,

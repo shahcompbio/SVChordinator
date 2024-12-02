@@ -7,7 +7,8 @@ out_dir = config["out_dir"]
 minda_tsv = config["samples"]
 sample_name = config["sample_name"]
 ONT = config["ONT"]
-
+oncokb = config["annotate"]["oncokb"]
+gene_annotations = config["annotate"]["gene_annotation"]
 ### helper functions ###
 def extract_individual_calls(minda_tsv):
     """
