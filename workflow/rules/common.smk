@@ -43,6 +43,10 @@ def get_output():
         output.append(target4)
         output.append(target5)
         output.append(target6)
+    # just reformat minda if genotyping hasn't been run
+    else:
+        target1 = os.path.join(out_dir,"somatic_SVs",sample_name + "_filtered_ensemble.vcf")
+        output.append(target1)
     if config["annotate"]["activate"]:
         target7 = os.path.join(out_dir,"somatic_SVs",sample_name+ ".filtered_ensemble.tsv")
         target8 = expand(os.path.join(out_dir,"somatic_SVs","split_out",

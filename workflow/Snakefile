@@ -11,6 +11,9 @@ include: "rules/genotype.smk"
 include: "rules/annotate_sv.smk"
 include: "rules/visualize.smk"
 
+# resolves rule ambiguity when no genotyping is performed
+ruleorder: filter_minda > reformat_minda_no_genotype
+
 ### target_rules ####
 rule all:
     input:
