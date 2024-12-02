@@ -1,4 +1,4 @@
-include: "rules/common.smk"
+include: "common.smk"
 # reformat minda vcf if it hasn't been done already
 rule reformat_minda_no_genotype:
     input:
