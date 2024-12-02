@@ -15,6 +15,7 @@ include: "rules/visualize.smk"
 # import annotate_sv as a module and run different rules for ILL vs ONT
 module annotate:
     snakefile: "rules/annotate_sv.smk"
+    config: config
 if ONT:
     use rule * from annotate exclude ILL_variants2table as other_*
 else:
