@@ -1,6 +1,6 @@
 ## example boiler plate config; will update as pipeline progresses
 ## will add later ....
-samples: config/ill_samples.tsv
+samples: config/samples.tsv
 out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/ILL_SVChordinator_test
 sample_name: sample
 # filter for minda to look at SVs in regions of interest
