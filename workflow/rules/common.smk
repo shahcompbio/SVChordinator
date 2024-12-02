@@ -8,10 +8,7 @@ minda_tsv = config["samples"]
 sample_name = config["sample_name"]
 ONT = config["ONT"]
 
-
-
 ### helper functions ###
-
 def extract_individual_calls(minda_tsv):
     """
     extract a dict of info for each individual set of SV calls
