@@ -3,7 +3,7 @@ rule reformat_minda_no_genotype:
     input:
         minda_vcf = os.path.join(out_dir,"minda",sample_name + "_minda_ensemble.vcf"),
     output:
-        vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf")
+        out_vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf")
     threads: 1
     resources:
         mem_mb = 4000,
