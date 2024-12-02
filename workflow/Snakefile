@@ -16,10 +16,11 @@ include: "rules/visualize.smk"
 module annotate:
     snakefile: "rules/annotate_sv.smk"
     config: "config/config.yml"
+    prefix: "annotate"
 if ONT:
-    use rule * from annotate exclude ILL_variants2table as other_*
+    use rule * from annotate exclude ILL_variants2table as annotate_*
 else:
-    use rule * from annotate exclude variants2table as other_*
+    use rule * from annotate exclude variants2table as annotate_*
 
 # resolves rule ambiguity when no genotyping is performed
 ruleorder: filter_minda > reformat_minda_no_genotype
