@@ -29,3 +29,4 @@ else:
 rule all:
     input:
         get_output()
+    default_target: True
