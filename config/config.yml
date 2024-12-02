@@ -6,7 +6,7 @@ sample_name: sample
 # filter for minda to look at SVs in regions of interest
 filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
 # specify if sequencing was done with ONT, if not assumed to be Illumina
-ONT: False
+ONT: True
 ## perform genotyping with sniffles2 to extract read support from normal
 # note: genotyping step will not work with illumina samples
 genotype:
