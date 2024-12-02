@@ -8,8 +8,18 @@ min_version("7.31.1")
 include: "rules/common.smk"
 include: "rules/sv_merge.smk"
 include: "rules/genotype.smk"
-include: "rules/annotate_sv.smk"
 include: "rules/visualize.smk"
+
+
+
+# import annotate_sv as a module and run different rules for ILL vs ONT
+module annotate:
+    snakefile:
+        "rules/annotate_sv.smk"
+if ONT:
+    use rule * from annotate exclude ILL_variants2table as other_*
+else:
+    use rule * from annotate exclude variants2table as other_*
 
 # resolves rule ambiguity when no genotyping is performed
 ruleorder: filter_minda > reformat_minda_no_genotype

@@ -92,6 +92,27 @@ rule variants2table:
         bcftools query -f '%CHROM\t%POS\t%ID\t%INFO/SVTYPE\t%INFO/STRANDS\t%INFO/BP_NOTATION\n' {input.vcf} -u -H -o {output.tsv}
         """
 
+# convert illumina variants to table
+rule ILL_variants2table:
+    input:
+        vcf = _fetch_vcf
+    params:
+        vcf = temp(os.path.join(out_dir,"raw_SVs",
+            sample_name,sample_name + ".{caller}.vcf")),
+    output:
+        tsv = os.path.join(out_dir, "raw_SVs",
+            sample_name, sample_name+ ".{caller}.tsv")
+    container:
+        "docker://quay.io/preskaa/viola-sv:1.0.2"
+    threads: 1
+    resources:
+        time = 20,
+        mem_mb = 4000,
+        retries = 0,
+    script:
+        "../scripts/viola_sv.py"
+
+
 rule annotate_svtypes:
     input:
         all_SVs = os.path.join(out_dir,"somatic_SVs",
