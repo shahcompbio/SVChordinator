@@ -19,7 +19,7 @@ module annotate:
 if ONT:
     use rule * from annotate exclude ILL_variants2table as annot_*
     # resolves rule ambiguity when no genotyping is performed
-    ruleorder: filter_minda > reformat_minda_no_genotype
+    ruleorder: annot_filter_minda > annot_reformat_minda_no_genotype
 else:
     use rule * from annotate exclude variants2table as annot_*
 
