@@ -44,7 +44,7 @@ def convert_sign(sign):
 def convert_chroms(chrom):
     terms = chrom.split("chr")
     if len(terms) == 1:
-        return terms
+        return terms[0]
     else:
         return terms[1]
 
@@ -88,10 +88,10 @@ if __name__ == "__main__":
     #     "APS010.1_A673_proteome/fusion_SV_analysis/Homo_sapiens.GRCh38.111.annotations-genes.txt")
     # nanomonsvcalls = os.path.expanduser(
     #     "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
-    #     "APS017.1_3x3_SV_analysis/annotation_bug/SHAH_H003842_T01_01_WG02.filtered_ensemble.tsv")
+    #     "APS017.1_3x3_SV_analysis/annotation_bug/output.filtered.9.tsv")
     # test_out = os.path.expanduser(
     #     "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
-    #     "APS017.1_3x3_SV_analysis/annotation_bug/SHAH_H003842_T01_01_WG02.filtered_ensemble.annotated.tsv")
+    #     "APS017.1_3x3_SV_analysis/annotation_bug/test.annotated.tsv")
     # oncokb = os.path.expanduser("~/PycharmProjects/nanosavana/resources/cancerGeneList.tsv")
 
     gene_annotation = snakemake.params["annotations"]
