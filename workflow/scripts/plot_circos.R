@@ -4,6 +4,7 @@ library(dplyr)
 # paths
 sv.data.path <- snakemake@input[["annotated_SVs"]]
 circos.path <- snakemake@output[["circos_plot"]]
+ideo <- snakemake@params[["ideo"]]
 
 sv.data <- read.csv(sv.data.path, sep="\t")
 
@@ -50,8 +51,16 @@ for (i in 1:length(sv_types)){
 # plot
 out.file <- circos.path;
 pdf(file=out.file, height=8, width=8, compress=TRUE);
-data(UCSC.HG38.Human.CytoBandIdeogram)
-cyto.info <- UCSC.HG38.Human.CytoBandIdeogram
+if (ideo == "hg19"){
+  data(UCSC.HG19.Human.CytoBandIdeogram)
+  cyto.info <- UCSC.HG19.Human.CytoBandIdeogram
+} else if ( ideo == "hg38") {
+  data(UCSC.HG38.Human.CytoBandIdeogram)
+  cyto.info <- UCSC.HG38.Human.CytoBandIdeogram
+} else {
+  print("currently only supports hg19 and hg38")
+}
+
 RCircos.Set.Core.Components(cyto.info,
     tracks.inside=10, tracks.outside=0 )
 RCircos.Set.Plot.Area()

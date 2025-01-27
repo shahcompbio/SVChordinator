@@ -9,6 +9,7 @@ sample_name = config["sample_name"]
 ONT = config["ONT"]
 oncokb = config["annotate"]["oncokb"]
 gene_annotations = config["annotate"]["gene_annotation"]
+ideo = config["visualize"]["ideo"]
 ### helper functions ###
 def extract_individual_calls(minda_tsv):
     """

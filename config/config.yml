@@ -1,10 +1,10 @@
 ## example boiler plate config; will update as pipeline progresses
 ## will add later ....
-samples: config/AK-RT-003_samples.tsv
-out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/ONT_SVChordinator_fix
-sample_name: AK-RT-003
+samples: config/OV-004_samples.tsv
+out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/ONT_SVChordinator_hg37_fix
+sample_name: OV-004
 # filter for minda to look at SVs in regions of interest
-filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
+filter_bed: /data1/shahs3/reference/GRCh37/hg19.chroms.bed
 # specify if sequencing was done with ONT, if not assumed to be Illumina
 ONT: True
 ## perform genotyping with sniffles2 to extract read support from normal
@@ -17,9 +17,10 @@ genotype:
 annotate:
   activate: True
   oncokb: /data1/shahs3/reference/ref-sarcoma/241115_oncokb_cancerGeneList.tsv
-  gene_annotation: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/Homo_sapiens.GRCh38.111.annotations-genes.txt
+  gene_annotation: /data1/shahs3/reference/GRCh37/Homo_sapiens.GRCh37.75.annotations-genes.txt
 # make circos plot
 visualize:
   activate: True
+  ideo: "hg19" # reference for ideogram; valid options are hg19 or hg38
 
 

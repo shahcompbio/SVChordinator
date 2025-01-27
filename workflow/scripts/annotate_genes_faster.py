@@ -107,9 +107,11 @@ if __name__ == "__main__":
     pbar = tqdm(total=len(svs))
     for rix, row in svs.iterrows():
         if rix % 10 == 0: pbar.update(10)
-        _, chrom1 = row["chrom1"].split("chr")
+        chrom1 = str(row["chrom1"])
+        _, chrom1 = chrom1.split("chr")
         pos1 = int(row["base1"])
-        _, chrom2 = row["chrom2"].split("chr")
+        chrom2 = str(row["chrom2"])
+        _, chrom2 = chrom2.split("chr")
         pos2 = int(row["base2"])
         svtype = row["SV_Type"]
         # set breakpoints
