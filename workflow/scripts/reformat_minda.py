@@ -15,7 +15,7 @@ with open(out_vcf, "w+") as f:
         if line.startswith("cmd"):
             continue
         # replace quality with dummy number for sniffles
-        elif line.startswith("chr"):
+        elif not line.startswith("#"):
             terms = line.split("\t")
             terms[5] = "30"
             newline = ("\t").join(terms)
