@@ -41,13 +41,6 @@ def convert_sign(sign):
     mapping = {'+': 1, '-': -1}
     return mapping.get(sign, 0)  # Returns 0 if the sign is not "+" or "-"
 
-def convert_chroms(chrom):
-    terms = chrom.split("chr")
-    if len(terms) == 1:
-        return terms[0]
-    else:
-        return terms[1]
-
 def _fetch_gene_names(brk, refdat, window = 0):
     """
     fetch gene names
@@ -115,11 +108,9 @@ if __name__ == "__main__":
     pbar = tqdm(total=len(svs))
     for rix, row in svs.iterrows():
         if rix % 10 == 0: pbar.update(10)
-        chrom1 = str(row["chrom1"])
-        chrom1 = convert_chroms(chrom1)
+        _, chrom1 = row["chrom1"].split("chr")
         pos1 = int(row["base1"])
-        chrom2 = str(row["chrom2"])
-        chrom2 = convert_chroms(chrom2)
+        _, chrom2 = row["chrom2"].split("chr")
         pos2 = int(row["base2"])
         svtype = row["SV_Type"]
         # set breakpoints

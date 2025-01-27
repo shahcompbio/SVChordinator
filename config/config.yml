@@ -3,6 +3,7 @@
 samples: config/OV-004_samples.tsv
 out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/ONT_SVChordinator_hg37_fix
 sample_name: OV-004
+reference: "hg19" # reference; valid options are hg19 or hg38
 # filter for minda to look at SVs in regions of interest
 filter_bed: /data1/shahs3/reference/GRCh37/hg19.chroms.bed
 # specify if sequencing was done with ONT, if not assumed to be Illumina
@@ -21,6 +22,5 @@ annotate:
 # make circos plot
 visualize:
   activate: True
-  ideo: "hg19" # reference for ideogram; valid options are hg19 or hg38
 
 
