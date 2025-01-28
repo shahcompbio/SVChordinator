@@ -67,7 +67,6 @@ def get_chrom2_pos2(row, infos):
         pat = re.search('[\[\]](.+):(\d+)', row['ALT'])
         assert pat
         chrom2, pos2 = pat.groups()
-        print(chrom2)
     elif infos['SVTYPE'] == 'INS':
         chrom2, pos2 = row['#CHROM'], row['POS']
     else:
