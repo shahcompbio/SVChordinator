@@ -40,6 +40,7 @@ def check_oncokb(gsvs, oncokb):
 def convert_sign(sign):
     mapping = {'+': 1, '-': -1}
     return mapping.get(sign, 0)  # Returns 0 if the sign is not "+" or "-"
+
 def _fetch_gene_names(brk, refdat, window = 0):
     """
     fetch gene names
@@ -80,10 +81,10 @@ if __name__ == "__main__":
     #     "APS010.1_A673_proteome/fusion_SV_analysis/Homo_sapiens.GRCh38.111.annotations-genes.txt")
     # nanomonsvcalls = os.path.expanduser(
     #     "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
-    #     "APS017.1_3x3_SV_analysis/annotation_bug/SHAH_H003842_T01_01_WG02.filtered_ensemble.tsv")
+    #     "APS017.1_3x3_SV_analysis/annotation_bug/output.filtered.9.tsv")
     # test_out = os.path.expanduser(
     #     "~/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/"
-    #     "APS017.1_3x3_SV_analysis/annotation_bug/SHAH_H003842_T01_01_WG02.filtered_ensemble.annotated.tsv")
+    #     "APS017.1_3x3_SV_analysis/annotation_bug/test.annotated.tsv")
     # oncokb = os.path.expanduser("~/PycharmProjects/nanosavana/resources/cancerGeneList.tsv")
 
     gene_annotation = snakemake.params["annotations"]

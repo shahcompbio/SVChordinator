@@ -17,8 +17,20 @@ def parse_args():
     p.add_argument("-sniffles_vcf", "--sniffles_vcf",
                    help="sniffles vcf for calculating read support; required if \
                    --read_support flag is True", required=False)
+    p.add_argument('-ref', '--ref', help="reference", required=True)
     args = p.parse_args()
     return args
+
+
+def convert_hg37(df):
+    chroms1 = list(df["chrom1"])
+    chroms1 = ["chr"+chr for chr in chroms1]
+    df["chrom1"] = chroms1
+    chroms2 = list(df["chrom2"])
+    chroms2 = ["chr"+chr for chr in chroms2]
+    df["chrom2"] = chroms2
+    return df
+
 
 
 def proc_info(row):
@@ -159,6 +171,9 @@ if __name__ == "__main__":
     mafobj.proc_vcf(vcf_path, survivor=False)
     sniffles_maf = mafobj.to_df()
     maf = mafobj.to_df()
+    reference = snakemake.params["ref"]
+    if reference == "hg19":
+        maf = convert_hg37(maf)
     maf.to_csv(snakemake.output["tsv"], sep='\t', index=False)
     # csv_path = '/Users/asherpreskasteinberg/Library/CloudStorage/OneDrive-MemorialSloanKetteringCancerCenter/lab_notebook/APS017.1_3x3_SV_analysis/test'
     # maf.to_csv(csv_path, sep='\t', index=False)

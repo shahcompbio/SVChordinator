@@ -23,7 +23,8 @@ rule convert_ensemble_vcf:
         split_tsv = expand(os.path.join(out_dir,"somatic_SVs", "split_out",
             sample_name, "output.filtered.{split}.tsv"), split=np.arange(0, 20))
     params:
-        split_out = os.path.join(out_dir,"somatic_SVs","split_out", sample_name)
+        split_out = os.path.join(out_dir,"somatic_SVs","split_out", sample_name),
+        ref = ideo
     container:
         "docker://quay.io/preskaa/annotate_genes:v240817"
     script:
