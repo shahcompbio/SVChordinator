@@ -18,7 +18,7 @@ genotype:
 annotate:
   activate: True
   oncokb: /data1/shahs3/reference/ref-sarcoma/241115_oncokb_cancerGeneList.tsv
-  gene_annotation: /data1/shahs3/reference/GRCh37/Homo_sapiens.GRCh37.75.annotations-genes.txt
+  gene_annotation: /data1/shahs3/reference/GRCh37/Homo_sapiens.GRCh37.87.annotations-genes.txt
 # make circos plot
 visualize:
   activate: True
