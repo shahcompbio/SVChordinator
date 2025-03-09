@@ -14,8 +14,7 @@
 ## set directories
 tag=APS017.1
 pipeline_dir=$HOME/SVChordinator
-#logdir=${submitdir}/log
-outdir=/data1/shahs3/users/preskaa/${tag}_Archive/ILL_SVChordinator_test
+outdir=/data1/shahs3/users/preskaa/ThreeByThreeSarcoma/data/APS030_3x3_fusions/germline_sv/AK-RT-003_SVChordinator
 config_yaml=config/config.yml
 profile_yaml=${pipeline_dir}/workflow/profiles/
 snakefile=${pipeline_dir}/workflow/Snakefile

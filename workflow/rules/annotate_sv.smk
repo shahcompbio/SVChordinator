@@ -77,11 +77,31 @@ def _fetch_vcf(wildcards):
     assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
     return list(df["vcf_path"])[0]
 
+# fetch ont vcfs
+def _fetch_ont_vcf(wildcards):
+    df = caller_df[caller_df["caller"] == wildcards.caller]
+    assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
+    if list(df["nickname"])[0] == "ONT":
+        return list(df["vcf_path"])[0]
+    else:
+        return None
+
+def _fetch_ill_vcf(wildcards):
+    df = caller_df[caller_df["caller"] == wildcards.caller]
+    assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
+    if list(df["nickname"])[0] == "ILL":
+        return list(df["vcf_path"])[0]
+    else:
+        return None
+
+
+
 rule variants2table:
     input:
-        vcf = _fetch_vcf
+        vcf = _fetch_ont_vcf
     output:
-        tsv = os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ ".{caller}.tsv")
+        tsv = os.path.join(out_dir, "raw_SVs",
+            sample_name, sample_name+ ".{caller}.tsv")
     container:
         "docker://quay.io/biocontainers/bcftools:1.21--h8b25389_0"
     threads: 1
@@ -97,10 +117,10 @@ rule variants2table:
 # convert illumina variants to table
 rule ILL_variants2table:
     input:
-        vcf = _fetch_vcf
+        vcf = _fetch_ill_vcf
     params:
         vcf = temp(os.path.join(out_dir,"raw_SVs",
-            sample_name,sample_name + ".{caller}.vcf")),
+            sample_name, sample_name + ".{caller}.vcf")),
     output:
         tsv = os.path.join(out_dir, "raw_SVs",
             sample_name, sample_name+ ".{caller}.tsv")

@@ -1,13 +1,11 @@
 ## example boiler plate config; will update as pipeline progresses
 ## will add later ....
-samples: config/samples.tsv
-out_dir: /data1/shahs3/users/preskaa/APS017.1_Archive/ILL_SVChordinator_test
-sample_name: sample
+samples: config/AK-RT-003_samples.tsv
+out_dir: /data1/shahs3/users/preskaa/ThreeByThreeSarcoma/data/APS030_3x3_fusions/germline_sv/AK-RT-003_SVChordinator
+sample_name: AK-RT-003
 reference: "hg38" # reference; valid options are hg19 or hg38
 # filter for minda to look at SVs in regions of interest
 filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
-# specify if sequencing was done with ONT, if not assumed to be Illumina
-ONT: True
 ## perform genotyping with sniffles2 to extract read support from normal
 # note: genotyping step will not work with illumina samples
 genotype:
