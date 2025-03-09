@@ -19,7 +19,7 @@ config_yaml=config/config.yml
 profile_yaml=${pipeline_dir}/workflow/profiles/
 snakefile=${pipeline_dir}/workflow/Snakefile
 ## switch to the right conda environment
-source /home/preskaa/miniconda3/bin/activate snakemake
+source /home/preskaa/miniforge3/bin/activate snakemake
 
 mkdir -p ${outdir}
 
