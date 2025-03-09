@@ -10,6 +10,7 @@ oncokb = config["annotate"]["oncokb"]
 gene_annotations = config["annotate"]["gene_annotation"]
 sv_type = config["sv_type"]
 ideo = config["reference"]
+min_callers = config["min_callers"]
 ### helper functions ###
 def extract_individual_calls(minda_tsv):
     """

@@ -8,6 +8,8 @@ reference: "hg38" # reference; valid options are hg19 or hg38
 filter_bed: /data1/shahs3/reference/ref-sarcoma/GRCh38/v45/hg38.p14.chroms.bed
 # type of SV calls; valid options are 'germline' or 'somatic'
 sv_type: "germline"
+# minimum number of callers for consensus SV calls
+min_callers: 1
 ## perform genotyping for somatic ONT SVs with sniffles2 to extract read support from normal
 # note: genotyping step will not work if illumina samples are included or if SV calls are germline
 genotype:
