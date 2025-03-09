@@ -17,6 +17,7 @@ module annotate:
     snakefile: "rules/annotate_sv.smk"
     config: config
 # resolve rule ambiguity when no genotyping is performed
+use rule * from annotate as annot_*
 ruleorder: filter_minda > annot_reformat_minda_no_genotype
 # if ONT:
 #     use rule * from annotate exclude ILL_variants2table as annot_*
