@@ -122,7 +122,7 @@ rule annotate_svtypes:
     input:
         all_SVs = os.path.join(out_dir,"somatic_SVs",
             sample_name + ".filtered_ensemble.temp.annotated.tsv"),
-        caller_tables = define_caller_table_target(callers),
+        caller_tables = define_caller_table_targets(callers),
     output:
         all_SVs = os.path.join(out_dir,"somatic_SVs",
             sample_name + ".filtered_ensemble.annotated.tsv")

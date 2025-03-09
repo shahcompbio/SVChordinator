@@ -36,16 +36,12 @@ def define_caller_table_targets(callers):
     for caller in callers:
         if caller in ill_callers:
             tech = "ILL"
-            target = os.path.join(out_dir,"raw_SVs",
-                sample_name,tech,sample_name + f".{caller}.tsv")
-            ill_targets.append(target)
         elif caller in ont_callers:
             tech = "ONT"
-
         else:
             print(f"caller {caller} not supported and will not be included")
         target = os.path.join(out_dir,"raw_SVs",
-            sample_name,tech,sample_name + f".{caller}.tsv")
+            sample_name, tech, sample_name + f".{caller}.tsv")
         targets.append(target)
     return targets
 
