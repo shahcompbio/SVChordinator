@@ -26,6 +26,29 @@ def extract_individual_calls(minda_tsv):
 caller_df, callers = extract_individual_calls(minda_tsv)
 print(callers)
 
+def define_caller_table_targets(callers):
+    """
+    define technology used for each caller; needs improvement
+    """
+    targets = []
+    ill_callers = ["SvABA", "manta", "GRIPSS"]
+    ont_callers = ["nanomonsv", "SAVANA", "Severus", "cuteSV", "Sniffles2"]
+    for caller in callers:
+        if caller in ill_callers:
+            tech = "ILL"
+            target = os.path.join(out_dir,"raw_SVs",
+                sample_name,tech,sample_name + f".{caller}.tsv")
+            ill_targets.append(target)
+        elif caller in ont_callers:
+            tech = "ONT"
+
+        else:
+            print(f"caller {caller} not supported and will not be included")
+        target = os.path.join(out_dir,"raw_SVs",
+            sample_name,tech,sample_name + f".{caller}.tsv")
+        targets.append(target)
+    return targets
+
 def get_output():
     """
     returns targets for rule all
@@ -53,8 +76,7 @@ def get_output():
             sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
         target9 = os.path.join(out_dir,"somatic_SVs",
              sample_name+ ".filtered_ensemble.annotated.tsv")
-        target10 = expand(os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ ".{caller}.tsv"),
-            caller=callers)
+        target10 = define_caller_table_targets(callers)
         output.append(target7)
         output.extend(target8)
         output.append(target9)

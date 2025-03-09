@@ -77,31 +77,14 @@ def _fetch_vcf(wildcards):
     assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
     return list(df["vcf_path"])[0]
 
-# fetch ont vcfs
-def _fetch_ont_vcf(wildcards):
-    df = caller_df[caller_df["caller"] == wildcards.caller]
-    assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
-    if list(df["nickname"])[0] == "ONT":
-        return list(df["vcf_path"])[0]
-    else:
-        return None
-
-def _fetch_ill_vcf(wildcards):
-    df = caller_df[caller_df["caller"] == wildcards.caller]
-    assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
-    if list(df["nickname"])[0] == "ILL":
-        return list(df["vcf_path"])[0]
-    else:
-        return None
-
 
 
 rule variants2table:
     input:
-        vcf = _fetch_ont_vcf
+        vcf = _fetch_vcf
     output:
         tsv = os.path.join(out_dir, "raw_SVs",
-            sample_name, sample_name+ ".{caller}.tsv")
+            sample_name, "ONT", sample_name+ ".{caller}.tsv")
     container:
         "docker://quay.io/biocontainers/bcftools:1.21--h8b25389_0"
     threads: 1
@@ -117,13 +100,13 @@ rule variants2table:
 # convert illumina variants to table
 rule ILL_variants2table:
     input:
-        vcf = _fetch_ill_vcf
+        vcf = _fetch_vcf
     params:
         vcf = temp(os.path.join(out_dir,"raw_SVs",
-            sample_name, sample_name + ".{caller}.vcf")),
+            sample_name, "ILL", sample_name + ".{caller}.vcf")),
     output:
         tsv = os.path.join(out_dir, "raw_SVs",
-            sample_name, sample_name+ ".{caller}.tsv")
+            sample_name, "ILL", sample_name+ ".{caller}.tsv")
     container:
         "docker://quay.io/preskaa/viola-sv:1.0.2"
     threads: 1
@@ -139,8 +122,7 @@ rule annotate_svtypes:
     input:
         all_SVs = os.path.join(out_dir,"somatic_SVs",
             sample_name + ".filtered_ensemble.temp.annotated.tsv"),
-        caller_tables = expand(os.path.join(out_dir, "raw_SVs",
-            sample_name, sample_name+ ".{caller}.tsv"), caller=callers),
+        caller_tables = define_caller_table_target(callers),
     output:
         all_SVs = os.path.join(out_dir,"somatic_SVs",
             sample_name + ".filtered_ensemble.annotated.tsv")
