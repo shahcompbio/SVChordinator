@@ -6,7 +6,7 @@ import pandas as pd
 out_dir = config["out_dir"]
 minda_tsv = config["samples"]
 sample_name = config["sample_name"]
-ONT = config["ONT"]
+#ONT = config["ONT"]
 oncokb = config["annotate"]["oncokb"]
 gene_annotations = config["annotate"]["gene_annotation"]
 ideo = config["reference"]
