@@ -1,9 +1,9 @@
 rule plot_circos:
     input:
-        annotated_SVs = os.path.join(out_dir,"somatic_SVs",
+        annotated_SVs = os.path.join(out_dir,f"{sv_type}_SVs",
              sample_name + ".filtered_ensemble.annotated.tsv")
     output:
-        circos_plot = os.path.join(out_dir,"somatic_SVs",
+        circos_plot = os.path.join(out_dir,f"{sv_type}_SVs",
              sample_name + ".circos.pdf")
     params:
         ideo = ideo

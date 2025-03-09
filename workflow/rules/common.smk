@@ -6,9 +6,9 @@ import pandas as pd
 out_dir = config["out_dir"]
 minda_tsv = config["samples"]
 sample_name = config["sample_name"]
-#ONT = config["ONT"]
 oncokb = config["annotate"]["oncokb"]
 gene_annotations = config["annotate"]["gene_annotation"]
+sv_type = config["sv_type"]
 ideo = config["reference"]
 ### helper functions ###
 def extract_individual_calls(minda_tsv):
@@ -53,24 +53,24 @@ def get_output():
     output = []
     target1 = os.path.join(out_dir, "minda", sample_name+"_minda_ensemble.vcf")
     output.append(target1)
-    if config["genotype"]["activate"]:
+    if config["genotype"]["activate"] and sv_type == "somatic":
         target3 = os.path.join(out_dir, "sniffles", sample_name + "_normal_genotypes.vcf")
         target4 = os.path.join(out_dir,"sniffles",sample_name + "_tumor_genotypes.vcf")
         target5 = os.path.join(out_dir, "sniffles", sample_name + "_filtered_IDs.tsv")
-        target6 = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf")
+        target6 = os.path.join(out_dir, f"{sv_type}_SVs", sample_name + "_filtered_ensemble.vcf")
         output.append(target3)
         output.append(target4)
         output.append(target5)
         output.append(target6)
     # just reformat minda if genotyping hasn't been run
     else:
-        target1 = os.path.join(out_dir,"somatic_SVs",sample_name + "_filtered_ensemble.vcf")
+        target1 = os.path.join(out_dir,f"{sv_type}_SVs",sample_name + "_filtered_ensemble.vcf")
         output.append(target1)
     if config["annotate"]["activate"]:
-        target7 = os.path.join(out_dir,"somatic_SVs",sample_name+ ".filtered_ensemble.tsv")
-        target8 = expand(os.path.join(out_dir,"somatic_SVs","split_out",
+        target7 = os.path.join(out_dir,f"{sv_type}_SVs",sample_name+ ".filtered_ensemble.tsv")
+        target8 = expand(os.path.join(out_dir,f"{sv_type}_SVs","split_out",
             sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
-        target9 = os.path.join(out_dir,"somatic_SVs",
+        target9 = os.path.join(out_dir,f"{sv_type}_SVs",
              sample_name+ ".filtered_ensemble.annotated.tsv")
         target10 = define_caller_table_targets(callers)
         output.append(target7)
@@ -78,7 +78,7 @@ def get_output():
         output.append(target9)
         output.append(target10)
     if config["visualize"]["activate"]:
-        target10  = os.path.join(out_dir,"somatic_SVs",
+        target10  = os.path.join(out_dir,f"{sv_type}_SVs",
              sample_name + ".circos.pdf")
         output.append(target10)
     return output
