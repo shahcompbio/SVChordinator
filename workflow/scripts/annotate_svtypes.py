@@ -29,7 +29,7 @@ for i in np.arange(0, len(caller_tables)):
     caller_table["caller"] = "caller_{i}".format(i=i)
     # uniform column names for merging
     # rename columns
-    all_callers.columns = ["chrom", "pos", "ID", "SV_Type",
+    caller_table.columns = ["chrom", "pos", "ID", "SV_Type",
                            "Strands", "Strand", "BP_notation", "caller"]
     all_callers = pd.concat([all_callers, caller_table])
 # fix the strands by merging in BP_notation column (some callers use this instead of Strands)
