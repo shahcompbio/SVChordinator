@@ -38,4 +38,4 @@ snakemake \
   --conda-prefix /data1/shahs3/users/preskaa/conda \
   --singularity-prefix /data1/shahs3/users/preskaa/singularity \
   --singularity-args "--bind /data1/shahs3" \
-  --dry-run
+ # --dry-run
