@@ -8,7 +8,7 @@ rule sv_merge:
         sample_name=config["sample_name"],
         out_dir=os.path.join(out_dir, "minda"),
         filter_bed=config["filter_bed"],
-        min_support=2,
+        min_support=min_callers,
         tolerance=100,
         min_size=50
     resources:

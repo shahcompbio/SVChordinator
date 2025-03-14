@@ -38,7 +38,8 @@ cols = ["chrom1", "pos1", "id", "svtype"]
 smalldf = df[cols].copy()
 # Combine `strand1` and `strand2` into a new column
 smalldf['strands'] = df['strand1'] + df['strand2']
-# blank column to conform to annotation rule
+# blank columns to conform to annotation rule
+smalldf["STRAND"] = "."
 smalldf["BP_notation"] = "."
 smalldf.to_csv(output_table, sep="\t", index=None)
 

@@ -1,10 +1,9 @@
-include: "common.smk"
 # reformat minda vcf if it hasn't been done already
 rule reformat_minda_no_genotype:
     input:
         minda_vcf = os.path.join(out_dir,"minda",sample_name + "_minda_ensemble.vcf"),
     output:
-        out_vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf")
+        out_vcf = os.path.join(out_dir, f"{sv_type}_SVs", sample_name + "_filtered_ensemble.vcf")
     threads: 1
     resources:
         mem_mb = 4000,
@@ -17,13 +16,13 @@ rule reformat_minda_no_genotype:
 # convert sniffles-format vcf to a tsv
 rule convert_ensemble_vcf:
     input:
-        vcf = os.path.join(out_dir, "somatic_SVs", sample_name + "_filtered_ensemble.vcf"),
+        vcf = os.path.join(out_dir, f"{sv_type}_SVs", sample_name + "_filtered_ensemble.vcf"),
     output:
-        tsv = os.path.join(out_dir,"somatic_SVs",sample_name+ ".filtered_ensemble.tsv"),
-        split_tsv = expand(os.path.join(out_dir,"somatic_SVs", "split_out",
+        tsv = os.path.join(out_dir,f"{sv_type}_SVs",sample_name+ ".filtered_ensemble.tsv"),
+        split_tsv = expand(os.path.join(out_dir,f"{sv_type}_SVs", "split_out",
             sample_name, "output.filtered.{split}.tsv"), split=np.arange(0, 20))
     params:
-        split_out = os.path.join(out_dir,"somatic_SVs","split_out", sample_name),
+        split_out = os.path.join(out_dir,f"{sv_type}_SVs","split_out", sample_name),
         ref = ideo
     container:
         "docker://quay.io/preskaa/annotate_genes:v240817"
@@ -33,10 +32,10 @@ rule convert_ensemble_vcf:
 # annotate those genes ... marginally faster ...
 rule annotate_genes:
     input:
-        split_tsv = os.path.join(out_dir,"somatic_SVs", "split_out",
+        split_tsv = os.path.join(out_dir,f"{sv_type}_SVs", "split_out",
             sample_name, "output.filtered.{split}.tsv")
     output:
-        split_tsv = os.path.join(out_dir,"somatic_SVs","split_out",
+        split_tsv = os.path.join(out_dir,f"{sv_type}_SVs","split_out",
             sample_name, "output.filtered.annotated.{split}.tsv")
     params:
         oncokb = oncokb,
@@ -52,10 +51,10 @@ rule annotate_genes:
 # merge gene annotation outputs into a unified dataframe ....
 rule merge_annotated_SVs:
     input:
-        split_tsvs = expand(os.path.join(out_dir,"somatic_SVs", "split_out",
+        split_tsvs = expand(os.path.join(out_dir,f"{sv_type}_SVs", "split_out",
             sample_name, "output.filtered.annotated.{split}.tsv"), split=np.arange(0, 20))
     output:
-        all_SVs = temp(os.path.join(out_dir,"somatic_SVs",
+        all_SVs = temp(os.path.join(out_dir,f"{sv_type}_SVs",
              sample_name+ ".filtered_ensemble.temp.annotated.tsv"))
     container:
         "docker://quay.io/preskaa/annotate_genes:v240817"
@@ -77,11 +76,14 @@ def _fetch_vcf(wildcards):
     assert len(df) == 1, f"{len(df)} vcfs for {wildcards.caller}"
     return list(df["vcf_path"])[0]
 
+
+
 rule variants2table:
     input:
         vcf = _fetch_vcf
     output:
-        tsv = os.path.join(out_dir, "raw_SVs", sample_name, sample_name+ ".{caller}.tsv")
+        tsv = os.path.join(out_dir, "raw_SVs",
+            sample_name, "ONT", sample_name+ ".{caller}.tsv")
     container:
         "docker://quay.io/biocontainers/bcftools:1.21--h8b25389_0"
     threads: 1
@@ -91,7 +93,7 @@ rule variants2table:
         retries = 0,
     shell:
         """
-        bcftools query -f '%CHROM\t%POS\t%ID\t%INFO/SVTYPE\t%INFO/STRANDS\t%INFO/BP_NOTATION\n' {input.vcf} -u -H -o {output.tsv}
+        bcftools query -f '%CHROM\t%POS\t%ID\t%INFO/SVTYPE\t%INFO/STRANDS\t%INFO/STRAND\t%INFO/BP_NOTATION\n' {input.vcf} -u -H -o {output.tsv}
         """
 
 # convert illumina variants to table
@@ -100,10 +102,10 @@ rule ILL_variants2table:
         vcf = _fetch_vcf
     params:
         vcf = temp(os.path.join(out_dir,"raw_SVs",
-            sample_name,sample_name + ".{caller}.vcf")),
+            sample_name, "ILL", sample_name + ".{caller}.vcf")),
     output:
         tsv = os.path.join(out_dir, "raw_SVs",
-            sample_name, sample_name+ ".{caller}.tsv")
+            sample_name, "ILL", sample_name+ ".{caller}.tsv")
     container:
         "docker://quay.io/preskaa/viola-sv:1.0.2"
     threads: 1
@@ -117,12 +119,11 @@ rule ILL_variants2table:
 
 rule annotate_svtypes:
     input:
-        all_SVs = os.path.join(out_dir,"somatic_SVs",
+        all_SVs = os.path.join(out_dir,f"{sv_type}_SVs",
             sample_name + ".filtered_ensemble.temp.annotated.tsv"),
-        caller_tables = expand(os.path.join(out_dir, "raw_SVs",
-            sample_name, sample_name+ ".{caller}.tsv"), caller=callers),
+        caller_tables = define_caller_table_targets(callers),
     output:
-        all_SVs = os.path.join(out_dir,"somatic_SVs",
+        all_SVs = os.path.join(out_dir,f"{sv_type}_SVs",
             sample_name + ".filtered_ensemble.annotated.tsv")
     container:
         "docker://quay.io/preskaa/annotate_genes:v240817"

@@ -27,16 +27,23 @@ for i in np.arange(0, len(caller_tables)):
     table_path = caller_tables[i]
     caller_table = pd.read_csv(table_path, sep="\t")
     caller_table["caller"] = "caller_{i}".format(i=i)
+    # uniform column names for merging
+    # rename columns
+    caller_table.columns = ["chrom", "pos", "ID", "SV_Type",
+                           "Strands", "Strand", "BP_notation", "caller"]
     all_callers = pd.concat([all_callers, caller_table])
-# rename columns
-all_callers.columns = ["chrom", "pos", "ID", "SV_Type", "Strands", "BP_notation", "caller"]
-# fix the strands by combine the columns
+# fix the strands by merging in BP_notation column (some callers use this instead of Strands)
 all_callers["Strands"] = all_callers.apply(
     lambda row: row["Strands"] if row["Strands"] != "." else row["BP_notation"],
     axis=1
 )
+# do the same by also merging in the Strand column
+all_callers["Strands"] = all_callers.apply(
+    lambda row: row["Strands"] if row["Strands"] != "." else row["Strand"],
+    axis=1
+)
 # Drop the original BP_notation column if no longer needed
-all_callers = all_callers.drop(columns=["BP_notation"])
+all_callers = all_callers.drop(columns=["BP_notation", "Strand"])
 # load input table of consensus SV calls
 all_svtable = pd.read_csv(input_svtable, sep="\t")
 # search for BNDs (the unresolved breakpoint)
