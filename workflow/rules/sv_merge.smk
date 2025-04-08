@@ -17,7 +17,7 @@ rule sv_merge:
         retries = 0
     threads: 1,
     container:
-        "docker://quay.io/preskaa/minda:v241109",
+        "docker://quay.io/preskaa/minda:v250408",
     shell:
         """
         /minda/minda.py ensemble --tsv {input.tsv} --out_dir {params.out_dir} \

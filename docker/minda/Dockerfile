@@ -3,7 +3,7 @@ FROM continuumio/miniconda3:24.7.1-0
 LABEL authors="asherpreskasteinberg"
 
 # Clone the Minda repository
-RUN git clone https://github.com/KolmogorovLab/minda.git
+RUN git clone https://github.com/shahcompbio/minda.git
 
 # Set the working directory to Minda and create the environment
 WORKDIR /minda
