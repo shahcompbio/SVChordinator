@@ -1,8 +1,10 @@
 executor: slurm
 
+__default__:
+  slurm-logdir: "logs/{rule}"
+
 default-resources:
   slurm_partition: componc_cpu
-  slurm-logdir: "logs/{rule}"
   mem_mb: 20000
   runtime: 180
 
