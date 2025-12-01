@@ -2,7 +2,7 @@ executor: slurm
 
 default-resources:
   slurm_partition: componc_cpu
-  slurm-logdir: "logs/`date +"%y-%m-%d"`/{rule}"
+  slurm-logdir: "logs/{rule}"
   mem_mb: 20000
   runtime: 180
 
