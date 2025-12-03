@@ -1,13 +1,16 @@
-executor: slurm
-
-__default__:
-  slurm-logdir: "logs/{rule}"
-
+cluster:
+  mkdir -p logs/`date +"%y-%m-%d"`/{rule} &&
+  sbatch
+    --partition={resources.partition}
+    --cpus-per-task={threads}
+    --mem={resources.mem_mb}
+    --job-name=smk-{rule}-{wildcards}
+    --time={resources.time}
+    --output=logs/`date +"%y-%m-%d"`/{rule}/{rule}-{wildcards}-%j.out
 default-resources:
-  slurm_partition: componc_cpu
-  mem_mb: 20000
-  runtime: 180
-
+  - partition=componc_cpu
+  - mem_mb=20000
+  - time=180
 restart-times: 1
 max-jobs-per-second: 3
 max-status-checks-per-second: 1
