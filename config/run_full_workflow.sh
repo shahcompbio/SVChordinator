@@ -12,11 +12,10 @@
 ### example slurm submission script ###
 
 ## set directories
-tag=APS017.1
 pipeline_dir=$HOME/SVChordinator
-outdir=/data1/shahs3/users/preskaa/ThreeByThreeSarcoma/data/APS030_3x3_fusions/somatic_svs/
+outdir=/data1/shahs3/users/preskaa/SarcAtlas/data/APS046_ont_ill_sv_analysis/TCDO-SAR-061_svchordinator/
 config_yaml=config/config.yml
-workflow_profile=${pipeline_dir}/workflow/profiles/config.v8+
+workflow_profile=${pipeline_dir}/workflow/profiles/config.v8+.cluster-generic
 snakefile=${pipeline_dir}/workflow/Snakefile
 ## switch to the right conda environment
 source /home/preskaa/miniforge3/bin/activate snakemake
@@ -38,4 +37,4 @@ uv run snakemake \
   --conda-prefix /data1/shahs3/users/preskaa/conda \
   --singularity-prefix /data1/shahs3/users/preskaa/singularity \
   --singularity-args "--bind /data1/shahs3" \
-  --dry-run
+  #--dry-run

@@ -6,7 +6,7 @@
 executor: cluster-generic
 
 # Cluster command (equivalent to old --cluster)
-cluster-generic-submit-cmd: |
+cluster-generic-submit-cmd:
   mkdir -p logs/`date +"%y-%m-%d"`/{rule} &&
   sbatch
     --partition={resources.partition}
@@ -17,7 +17,7 @@ cluster-generic-submit-cmd: |
     --mail-type=END
     --mail-user=preskaa@mskcc.org
     --output=logs/`date +"%y-%m-%d"`/{rule}/{rule}-{wildcards}-%j.out
-
+    --parsable
 # Default resources for all rules
 default-resources:
   - partition=componc_cpu
@@ -25,26 +25,16 @@ default-resources:
   - time=180
   - tmpdir='/data1/shahs3/users/preskaa/tmp'
 
-# Job submission settings
-jobs: 300
+restart-times: 0 #temporary
 max-jobs-per-second: 3
 max-status-checks-per-second: 1
-
-# Retry and error handling
-retries: 0  # was restart-times in v7
-keep-going: True
-rerun-incomplete: True
-
-# Local execution settings
 local-cores: 1
 latency-wait: 60
-
-# Output settings
+jobs: 300
+keep-going: True
+rerun-incomplete: True
 printshellcmds: True
-show-failed-logs: True
-
-# Scheduling
 scheduler: greedy
-
+use-conda: True
 # Software deployment (replaces use-singularity)
 software-deployment-method: apptainer

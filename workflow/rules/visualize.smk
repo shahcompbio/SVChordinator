@@ -1,10 +1,10 @@
 rule plot_circos:
     input:
         annotated_SVs = os.path.join(out_dir,f"{sv_type}_SVs",
-             sample_name + ".filtered_ensemble.annotated.tsv")
+             "{sample}.filtered_ensemble.annotated.tsv")
     output:
         circos_plot = os.path.join(out_dir,f"{sv_type}_SVs",
-             sample_name + ".circos.pdf")
+             "{sample}.circos.pdf")
     params:
         ideo = ideo
     container:

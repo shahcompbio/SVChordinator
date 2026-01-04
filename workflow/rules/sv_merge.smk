@@ -1,12 +1,26 @@
 # merge SVs
+def _write_minda_input(wildcards):
+    """
+    write minda input tsv for a given sample
+    :param wildcards:
+    :return: path to minda input tsv
+    """
+    sample = wildcards.sample
+    minda_tsv_path = os.path.join(out_dir, "minda", sample, sample + "_minda_input.tsv")
+    os.makedirs(os.path.dirname(minda_tsv_path), exist_ok=True)
+    df = pd.read_csv(sample_metadata, sep="\t")
+    sample_df = df[df["sample"] == sample]
+    minda_df = sample_df[["vcf_path", "caller", "tech"]]
+    minda_df.to_csv(minda_tsv_path, sep="\t", index=False, header=False)
+    return minda_tsv_path
+
 rule sv_merge:
     input:
-        tsv=minda_tsv
+        tsv=_write_minda_input
     output:
-        merged_vcf=os.path.join(out_dir, "minda", sample_name + "_minda_ensemble.vcf")
+        merged_vcf=os.path.join(out_dir, "minda", "{sample}","{sample}_minda_ensemble.vcf")
     params:
-        sample_name=config["sample_name"],
-        out_dir=os.path.join(out_dir, "minda"),
+        out_dir=os.path.join(out_dir, "minda", "{sample}"),
         filter_bed=config["filter_bed"],
         min_support=min_callers,
         tolerance=100,
@@ -21,7 +35,7 @@ rule sv_merge:
     shell:
         """
         /minda/minda.py ensemble --tsv {input.tsv} --out_dir {params.out_dir} \
-        --sample_name {params.sample_name} --min_support {params.min_support} \
+        --sample_name {wildcards.sample} --min_support {params.min_support} \
         --tolerance {params.tolerance} --min_size {params.min_size} \
         --bed {params.filter_bed}
         """
