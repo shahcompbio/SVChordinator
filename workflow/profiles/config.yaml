@@ -10,7 +10,7 @@ cluster:
     --mail-user=preskaa@mskcc.org
     --output=logs/`date +"%y-%m-%d"`/{rule}/{rule}-{wildcards}-%j.out
 default-resources:
-  - partition=componc_gpu,componc_cpu
+  - partition=componc_cpu
   - mem_mb=20000
   - time=180
   - "tmpdir='/data1/shahs3/users/preskaa/tmp'"
