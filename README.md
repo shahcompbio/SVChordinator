@@ -1,5 +1,27 @@
 # SVChordinator
-merge, annotate, and visualize structural variants (as "chords" in a circos plot).
+
+Merge, annotate, and visualize structural variants (as "chords" in a circos plot).
+
+## Installation
+
+### Quick Start with UV (Recommended)
+
+```bash
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone the repository
+git clone https://github.com/shahcompbio/SVChordinator.git
+cd SVChordinator
+
+# Create environment and install all dependencies
+uv sync
+
+# Verify installation
+uv run snakemake --version  # Should show 9.x.x
+```
+
+## Supported SV Callers
 
 Currently supports the following callers:
 
@@ -12,5 +34,7 @@ Currently supports the following callers:
 - `cuteSV`
 - `Sniffles2`
 
-input tsv file with paths to vcf must follow format of the `config/example_samples.tsv` file,
+## Configuration
+
+Input TSV file with paths to VCF must follow format of the `config/example_samples.tsv` file,
 in which callers are labeled with the names of the tools

@@ -1,0 +1,50 @@
+# Snakemake 9.x compatible profile configuration
+# Using cluster-generic executor (most similar to old --cluster approach)
+
+# Use the cluster-generic executor plugin
+# Install with: pip install snakemake-executor-plugin-cluster-generic
+executor: cluster-generic
+
+# Cluster command (equivalent to old --cluster)
+cluster-generic-submit-cmd: |
+  mkdir -p logs/`date +"%y-%m-%d"`/{rule} &&
+  sbatch
+    --partition={resources.partition}
+    --cpus-per-task={threads}
+    --mem={resources.mem_mb}
+    --job-name=smk-{rule}-{wildcards}
+    --time={resources.time}
+    --mail-type=END
+    --mail-user=preskaa@mskcc.org
+    --output=logs/`date +"%y-%m-%d"`/{rule}/{rule}-{wildcards}-%j.out
+
+# Default resources for all rules
+default-resources:
+  - partition=componc_cpu
+  - mem_mb=20000
+  - time=180
+  - tmpdir='/data1/shahs3/users/preskaa/tmp'
+
+# Job submission settings
+jobs: 300
+max-jobs-per-second: 3
+max-status-checks-per-second: 1
+
+# Retry and error handling
+retries: 0  # was restart-times in v7
+keep-going: True
+rerun-incomplete: True
+
+# Local execution settings
+local-cores: 1
+latency-wait: 60
+
+# Output settings
+printshellcmds: True
+show-failed-logs: True
+
+# Scheduling
+scheduler: greedy
+
+# Software deployment (replaces use-singularity)
+software-deployment-method: apptainer
